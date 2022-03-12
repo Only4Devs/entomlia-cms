@@ -24,6 +24,8 @@ const getFormConfigurationBySlug = async (req: CustomRequest, res: FastifyReply)
     } else {
       if (formConfiguration.content !== undefined && formConfiguration.content !== null) {
         formConfiguration.content = JSON.parse(formConfiguration.content)
+      } else {
+        formConfiguration.content = [[], [], [], collectionType.fields] as any
       }
     }
 
