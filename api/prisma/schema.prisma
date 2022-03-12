@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Admin {
+  id          Int      @id @default(autoincrement())
+  email       String   @db.VarChar(255)   @unique
+  username    String   @db.VarChar(255)   @unique
+  active      Boolean  @default(true)
+  password    String   @db.VarChar(255)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MediaLibraryDirectory {
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(255)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  MediaLibrary  MediaLibrary[]
+}
+
+model MediaLibrary {
+  id          Int        @id @default(autoincrement())
+  filename    String?    @db.VarChar(255)
+  width       Int?       @default(0)
+  height      Int?       @default(0)
+  mediaLibraryDirectoryId Int?
+  MediaLibraryDirectory   MediaLibraryDirectory?   @relation(fields: [mediaLibraryDirectoryId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model MediaSize {
+  id          Int        @id @default(autoincrement())
+  width       Int?       @default(0)
+  height      Int?       @default(0)
+  mode        String?    @db.VarChar(64)    @default("resize")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model CollectionType {
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(255)     @unique
+  slug        String     @db.VarChar(255)     @unique
+  tableName   String     @db.VarChar(255)     @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  CollectionTypeField CollectionTypeField[]
+  FormConfiguration FormConfiguration[]
+  icon        String     @db.VarChar(96)      @default("fa fa-folder-open")
+}
+
+model CollectionTypeField {
+  id               Int              @id @default(autoincrement())
+  collectionTypeId Int?
+  CollectionType   CollectionType?  @relation(fields: [collectionTypeId], references: [id])
+  title            String           @db.VarChar(255)
+  slug             String           @db.VarChar(255)
+  fieldType        String           @db.VarChar(255)
+  defaultValue     String?          @db.VarChar(255)
+  enumValues       String?          @db.VarChar(255)
+  dateType         String?          @db.VarChar(64)
+  numberType       String?          @db.VarChar(64)
+  isRequired       Boolean          @default(false)
+  isUnique         Boolean          @default(false)
+  position         Int?             @default(0)
+  minLength        Int?             @default(0)
+  maxLength        Int?             @default(0)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([collectionTypeId], name: "collection_type")
+}
+
+model FormConfiguration {
+  id               Int              @id @default(autoincrement())
+  collectionTypeId Int?
+  CollectionType   CollectionType?  @relation(fields: [collectionTypeId], references: [id])
+  content          String?          @db.Text
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
