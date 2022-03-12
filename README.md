@@ -6,5 +6,5 @@ The main assumption of the project is to enable the creation of a database struc
 Two databases are required. The main database stores the CMS configuration and information about the structures of individual modules. The second database will store the content added by the administrator.
 
 Each service has its README.md file in its directory.  
-API: [README.MD](api/README.md)  
+API: [README.MD](api/README.MD)  
 CMS: [README.MD](cms/README.md)
