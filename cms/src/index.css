@@ -50,6 +50,7 @@ table tr:last-of-type td {
   border-bottom: none;
 }
 
+.MuiInputBase-root,
 .MuiFormControl-root {
   width: 100%;
 }

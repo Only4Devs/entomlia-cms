@@ -1,5 +1,5 @@
 import React from 'react';
-import {Checkbox, FormControlLabel, TextareaAutosize, TextField} from '@mui/material';
+import {Checkbox, FormControlLabel, MenuItem, Select, TextareaAutosize, TextField} from '@mui/material';
 import {Controller} from 'react-hook-form';
 import InputHolder from '../layout/common/input-holder';
 import {FieldType} from '../../classes/field-type';
@@ -68,6 +68,48 @@ export default function FormFieldInput({field, index, errors, control, register,
           helperText={errors[field.slug!!] ? t(errors[field.slug!!].type) : ''}
           error={errors && errors[field.slug!!] !== undefined}
         />
+      ) : <></>}
+
+      {field.fieldType === 'number' ? (
+        <TextField
+          {...register(field.slug!!)}
+          onChange={e => setValue(field.slug!!, e.target.value)}
+          variant={'outlined'}
+          type={'number'}
+          className={``}
+          size={'small'}
+          defaultValue={null}
+          label={field.slug}
+          helperText={errors[field.slug!!] ? t(errors[field.slug!!].type) : ''}
+          error={errors && errors[field.slug!!] !== undefined}
+        />
+      ) : <></>}
+
+      {field.fieldType === 'enum' && field.values ? (
+          <Select
+            {...register('defaultValue')}
+            defaultValue={field?.defaultValue || 'null'}
+            labelId="input-default-value-label"
+            id="input-default-value"
+            label={t('Default value')}
+            onChange={e => {
+              setValue('defaultValue', e.target.value);
+            }}
+          >
+            {field.values.map((val, index) => <MenuItem key={`SelectVal_${field.slug}_${index}`} value={val}>{t(val)}</MenuItem>)}
+          </Select>
+        // <TextField
+        //   {...register(field.slug!!)}
+        //   onChange={e => setValue(field.slug!!, e.target.value)}
+        //   variant={'outlined'}
+        //   type={'number'}
+        //   className={``}
+        //   size={'small'}
+        //   defaultValue={null}
+        //   label={field.slug}
+        //   helperText={errors[field.slug!!] ? t(errors[field.slug!!].type) : ''}
+        //   error={errors && errors[field.slug!!] !== undefined}
+        // />
       ) : <></>}
 
       {field.fieldType === 'boolean' ? (

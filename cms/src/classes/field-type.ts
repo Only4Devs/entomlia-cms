@@ -21,4 +21,5 @@ export interface FieldType {
   enumValues?: string|null;
   dateType?: string|null;
   numberType?: string|null;
+  values?: Array<string>;
 }
