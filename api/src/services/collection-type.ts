@@ -31,6 +31,14 @@ const getListing = async () => {
   return result
 }
 
+const prepareFields = (fields: any) => {
+  fields.filter((it: any) => it.fieldType === 'enum').forEach((item: any) => {
+    item.values = item.enumValues.split(',')
+  })
+
+  return fields
+}
+
 const getBySlug = async (slug: string) => {
   try {
     const result = await prisma.collectionType.findFirst({
@@ -51,6 +59,9 @@ const getBySlug = async (slug: string) => {
         collectionTypeId: result.id,
       },
     }) as any;
+    if (result.fields) {
+      result.fields = prepareFields(result.fields)
+    }
 
     return result
   } catch (e) {
