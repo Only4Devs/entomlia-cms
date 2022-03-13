@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Checkbox, FormControlLabel, MenuItem, Select, TextareaAutosize, TextField} from '@mui/material';
 import {Controller} from 'react-hook-form';
 import InputHolder from '../layout/common/input-holder';
 import {FieldType} from '../../classes/field-type';
 import {useTranslation} from 'react-i18next';
 import {DatePicker, DateTimePicker, TimePicker} from '@mui/lab';
+import {Editor} from '@tinymce/tinymce-react';
 
 export interface FormFieldInputProps {
   field: FieldType;
@@ -17,6 +18,7 @@ export interface FormFieldInputProps {
 
 export default function FormFieldInput({field, index, errors, control, register, setValue}: FormFieldInputProps) {
   const {t} = useTranslation();
+  const editorRef = useRef<any>(null);
 
   return (
     <InputHolder key={`FieldBox${index}`}>
@@ -86,30 +88,39 @@ export default function FormFieldInput({field, index, errors, control, register,
       ) : <></>}
 
       {field.fieldType === 'enum' && field.values ? (
-          <Select
-            {...register('defaultValue')}
-            defaultValue={field?.defaultValue || 'null'}
-            labelId="input-default-value-label"
-            id="input-default-value"
-            label={t('Default value')}
-            onChange={e => {
-              setValue('defaultValue', e.target.value);
-            }}
-          >
-            {field.values.map((val, index) => <MenuItem key={`SelectVal_${field.slug}_${index}`} value={val}>{t(val)}</MenuItem>)}
-          </Select>
-        // <TextField
-        //   {...register(field.slug!!)}
-        //   onChange={e => setValue(field.slug!!, e.target.value)}
-        //   variant={'outlined'}
-        //   type={'number'}
-        //   className={``}
-        //   size={'small'}
-        //   defaultValue={null}
-        //   label={field.slug}
-        //   helperText={errors[field.slug!!] ? t(errors[field.slug!!].type) : ''}
-        //   error={errors && errors[field.slug!!] !== undefined}
-        // />
+        <Select
+          {...register('defaultValue')}
+          defaultValue={field?.defaultValue || 'null'}
+          labelId="input-default-value-label"
+          id="input-default-value"
+          label={t('Default value')}
+          onChange={e => {
+            setValue('defaultValue', e.target.value);
+          }}
+        >
+          {field.values.map((val, index) => <MenuItem key={`SelectVal_${field.slug}_${index}`} value={val}>{t(val)}</MenuItem>)}
+        </Select>
+      ) : <></>}
+
+      {field.fieldType === 'editor' ? (
+        <Editor
+          onInit={(evt, editor) => editorRef.current = editor}
+          initialValue=""
+          init={{
+            height: 500,
+            menubar: false,
+            plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+              'bold italic backcolor | alignleft aligncenter ' +
+              'alignright alignjustify | bullist numlist outdent indent | ' +
+              'removeformat | help',
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+          }}
+        />
       ) : <></>}
 
       {field.fieldType === 'boolean' ? (
