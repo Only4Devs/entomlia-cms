@@ -7,7 +7,8 @@
     "build": "tsc -w -p tsconfig.json",
     "dev": "nodemon build/index.js",
     "start": "node build/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node ./npm-scripts/post-install.js"
   },
   "keywords": [],
   "author": "",
