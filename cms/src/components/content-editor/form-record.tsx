@@ -10,6 +10,7 @@ import {FieldType} from '../../classes/field-type';
 import styled from '@emotion/styled';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import useContent from '../../hooks/use-content';
 
 export interface FormRecordProps {
   slug: string;
@@ -24,6 +25,7 @@ const GridButtonBottomStyled = styled(Grid)`
 
 export default function FormRecord({slug, id = null}: FormRecordProps) {
   const {t} = useTranslation();
+  const {createContent} = useContent();
   const [collectionType, setCollectionType] = useState<CollectionType | null>(null);
   const {getCollectionType} = useCollectionType();
   const {getFormConfiguration} = useFormConfiguration();
@@ -62,6 +64,11 @@ export default function FormRecord({slug, id = null}: FormRecordProps) {
 
   const onSubmit = async (data: any) => {
     console.log('on-submit', data, errors);
+    try {
+      await createContent(data, slug);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
