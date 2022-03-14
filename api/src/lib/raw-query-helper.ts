@@ -143,6 +143,29 @@ const modifyColumn = async (tableName: string, field: any) => {
   await prismaContent.$queryRawUnsafe(sql)
 }
 
+const insertRecord = async (tableName: string, data: any, fields: Array<any>) => {
+  const keys = Object.keys(data)
+  const parts: Array<string> = []
+  for (const k of keys) {
+    const value = data[k]
+    console.log('value', value)
+    const field = fields.find((it: any) => it.slug === k)
+    if (field !== undefined && field !== null) {
+      if (['varchar', 'enum', 'editor', 'text', 'uuid', 'date'].indexOf(field.fieldType) !== -1) {
+        parts.push(`'${value}'`)
+      } else {
+        parts.push(`${value}`)
+      }
+    }
+  }
+
+  const sql = `INSERT INTO ${tableName} (${keys.join(',')})
+               VALUES (${parts.join(',')})`
+
+  console.log('sql', sql)
+  return await prismaContent.$queryRawUnsafe(sql)
+}
+
 export {
   generateTableName,
   createTable,
@@ -150,5 +173,6 @@ export {
   dropTable,
   dropColumn,
   addColumn,
-  modifyColumn
+  modifyColumn,
+  insertRecord,
 }

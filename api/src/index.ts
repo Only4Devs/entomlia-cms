@@ -40,6 +40,7 @@ server.register(require('./routes/profile'))
 server.register(require('./routes/admin'))
 server.register(require('./routes/collection-type'))
 server.register(require('./routes/form-configuration'))
+server.register(require('./routes/content'))
 
 const start = async () => {
   try {

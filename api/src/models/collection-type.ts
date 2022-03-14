@@ -1,14 +1,11 @@
+import CollectionTypeField from './collection-type-field';
+
 export default interface CollectionType {
   id: number;
-  collectionTypeId: number;
   title: string;
   slug: string;
-  fieldType: string;
-  isRequired: boolean;
-  isUnique: boolean;
-  position?: number;
-  minLength?: number;
-  maxLength?: number;
+  tableName: string;
+  fields: Array<CollectionTypeField>;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }

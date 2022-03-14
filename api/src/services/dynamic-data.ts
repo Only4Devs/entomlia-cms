@@ -1,4 +1,4 @@
-import prisma from '../lib/prisma';
+import prismaContent from '../lib/prisma-content';
 
 const getListing = async (tableName: string) => {
   let result = [];
@@ -6,7 +6,7 @@ const getListing = async (tableName: string) => {
   try {
     const sql = `SELECT *
                  FROM ${tableName}`;
-    result = await prisma.$queryRawUnsafe(sql) as any[];
+    result = await prismaContent.$queryRawUnsafe(sql) as any[];
   } catch (e) {
     console.log(e)
   }
