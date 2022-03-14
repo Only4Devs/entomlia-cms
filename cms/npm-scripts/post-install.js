@@ -16,14 +16,18 @@ const copyRecursiveSync = (src, dest) => {
   }
 };
 
-const distPath = `${__dirname}/../public/dist`;
+const handleTinymceSource = () => {
+  const distPath = `${__dirname}/../public/dist`;
 
-if (!fs.existsSync(distPath)) {
-  fs.mkdirSync(distPath);
+  if (!fs.existsSync(distPath)) {
+    fs.mkdirSync(distPath);
+  }
+
+  const tinymcePath = `${distPath}/tinymce`;
+
+  if (!fs.existsSync(tinymcePath)) {
+    copyRecursiveSync(`${__dirname}/../node_modules/tinymce`, tinymcePath);
+  }
 }
 
-const tinymcePath = `${distPath}/tinymce`;
-
-if (!fs.existsSync(tinymcePath)) {
-  copyRecursiveSync(`${__dirname}/../node_modules/tinymce`, tinymcePath);
-}
+handleTinymceSource();
