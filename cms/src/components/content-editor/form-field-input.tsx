@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Checkbox, FormControlLabel, MenuItem, Select, TextareaAutosize, TextField} from '@mui/material';
 import {Controller} from 'react-hook-form';
 import InputHolder from '../layout/common/input-holder';
@@ -19,6 +19,7 @@ export interface FormFieldInputProps {
 export default function FormFieldInput({field, index, errors, control, register, setValue}: FormFieldInputProps) {
   const {t} = useTranslation();
   const editorRef = useRef<any>(null);
+  const [localValue, setLocalValue] = useState(null);
 
   return (
     <InputHolder key={`FieldBox${index}`}>
@@ -27,9 +28,11 @@ export default function FormFieldInput({field, index, errors, control, register,
       {field.fieldType === 'date' && field.dateType === 'date' ? (
         <DatePicker
           label="Date"
-          value={field.defaultValue}
+          value={localValue}
+          inputFormat={'YYYY-MM-DD'}
           onChange={(newValue) => {
             setValue(field.slug!!, newValue);
+            setLocalValue(newValue);
           }}
           renderInput={(params) => <TextField {...params} error={errors && errors[field.slug!!] !== undefined} />}
         />
@@ -38,9 +41,15 @@ export default function FormFieldInput({field, index, errors, control, register,
       {field.fieldType === 'date' && field.dateType === 'time' ? (
         <TimePicker
           label="Time"
-          value={field.defaultValue}
+          value={localValue}
+          inputFormat={'HH:mm'}
+          ampm={false}
           onChange={(newValue) => {
             setValue(field.slug!!, newValue);
+            console.log(newValue);
+            if (newValue !== undefined && newValue !== null) {
+              setLocalValue(newValue);
+            }
           }}
           renderInput={(params) => <TextField {...params} error={errors && errors[field.slug!!] !== undefined} />}
         />
@@ -50,9 +59,12 @@ export default function FormFieldInput({field, index, errors, control, register,
         <DateTimePicker
           renderInput={(props) => <TextField {...props} error={errors && errors[field.slug!!] !== undefined} />}
           label="Date & time"
-          value={field.defaultValue}
+          ampm={false}
+          value={localValue}
+          inputFormat={'YYYY-MM-DD HH:mm'}
           onChange={(newValue) => {
             setValue(field.slug!!, newValue);
+            setLocalValue(newValue);
           }}
         />
       ) : <></>}
@@ -89,16 +101,17 @@ export default function FormFieldInput({field, index, errors, control, register,
 
       {field.fieldType === 'enum' && field.values ? (
         <Select
-          {...register('defaultValue')}
+          {...register(field.slug!!)}
           defaultValue={field?.defaultValue || 'null'}
           labelId="input-default-value-label"
           id="input-default-value"
           label={t('Default value')}
           onChange={e => {
-            setValue('defaultValue', e.target.value);
+            setValue(field.slug!!, e.target.value);
           }}
         >
-          {field.values.map((val, index) => <MenuItem key={`SelectVal_${field.slug}_${index}`} value={val}>{t(val)}</MenuItem>)}
+          {field.values.map((val, index) => <MenuItem key={`SelectVal_${field.slug}_${index}`}
+                                                      value={val}>{t(val)}</MenuItem>)}
         </Select>
       ) : <></>}
 
@@ -119,6 +132,9 @@ export default function FormFieldInput({field, index, errors, control, register,
               'alignright alignjustify | bullist numlist outdent indent | ' +
               'removeformat | help',
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+          }}
+          onEditorChange={(content: string, editor: any) => {
+            setValue(field.slug!!, content);
           }}
         />
       ) : <></>}

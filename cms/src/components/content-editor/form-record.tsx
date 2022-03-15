@@ -11,6 +11,11 @@ import styled from '@emotion/styled';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import useContent from '../../hooks/use-content';
+import plLocale from 'date-fns/locale/pl';
+
+const localeMap = {
+  pl: plLocale
+}
 
 export interface FormRecordProps {
   slug: string;
@@ -32,6 +37,7 @@ export default function FormRecord({slug, id = null}: FormRecordProps) {
   const {reset, setValue, register, control, handleSubmit, getValues, formState: {errors}} = useForm();
   const [formConfiguration, setFormConfiguration] = useState<FormConfiguration | null>(null);
   const [state, setState] = useState<Array<Array<FieldType>>>([]);
+  const [locale, setLocale] = React.useState<keyof typeof localeMap>('pl');
 
   React.useEffect(() => {
     (async () => {
@@ -73,7 +79,7 @@ export default function FormRecord({slug, id = null}: FormRecordProps) {
 
   return (
     collectionType !== null ? (
-      <LocalizationProvider dateAdapter={DateAdapter}>
+      <LocalizationProvider dateAdapter={DateAdapter} locale={'pl'}>
         <form onSubmit={handleSubmit(onSubmit)}>
           {state.length >= 4 ? (
             <>
