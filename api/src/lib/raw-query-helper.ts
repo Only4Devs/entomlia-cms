@@ -1,5 +1,6 @@
 import {isNotEmpty} from './request-helper'
 import prismaContent from './prisma-content';
+import {v4 as uuidv4} from 'uuid';
 
 const generateTableName = (tableName: string) => {
   const value = tableName.split('-')
@@ -144,22 +145,29 @@ const modifyColumn = async (tableName: string, field: any) => {
 }
 
 const insertRecord = async (tableName: string, data: any, fields: Array<any>) => {
-  const keys = Object.keys(data)
   const parts: Array<string> = []
-  for (const k of keys) {
-    const value = data[k]
-    console.log('value', value)
-    const field = fields.find((it: any) => it.slug === k)
-    if (field !== undefined && field !== null) {
-      if (['varchar', 'enum', 'editor', 'text', 'uuid', 'date'].indexOf(field.fieldType) !== -1) {
-        parts.push(`'${value}'`)
+  for (const field of fields) {
+    if (field.fieldType === 'uuid') {
+      parts.push(`'${uuidv4()}'`)
+    } else {
+      let value = data[field.slug]
+      if (value === undefined) {
+        value = null
+      }
+      const fieldFound = fields.find((it: any) => it.slug === field.slug)
+      if (fieldFound !== undefined && fieldFound !== null) {
+        if (['varchar', 'enum', 'editor', 'text', 'uuid', 'date'].indexOf(field.fieldType) !== -1) {
+          parts.push(`'${value}'`)
+        } else {
+          parts.push(`${value}`)
+        }
       } else {
-        parts.push(`${value}`)
+        parts.push('NULL')
       }
     }
   }
 
-  const sql = `INSERT INTO ${tableName} (${keys.join(',')})
+  const sql = `INSERT INTO ${tableName} (${fields.map(it => it.slug).join(',')})
                VALUES (${parts.join(',')})`
 
   console.log('sql', sql)
