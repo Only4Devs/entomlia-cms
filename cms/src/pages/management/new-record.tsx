@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PageTitle from '../../components/layout/common/page-title';
 import {Button} from '@mui/material';
 import {useTranslation} from 'react-i18next';
@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import BoxContainer from '../../components/layout/common/box-container';
 import {useNavigate, useParams} from 'react-router-dom';
 import FormRecord from '../../components/content-editor/form-record';
+import {LayoutContext} from '../../hooks/layout-context';
 
 type Params = {
   slug: string;
@@ -22,6 +23,17 @@ export default function NewRecord() {
   const {t} = useTranslation();
   const {slug} = useParams<Params>();
   const navigate = useNavigate();
+  const {layout, setLayout} = useContext(LayoutContext);
+
+  React.useEffect(() => {
+    if (slug !== undefined && slug !== null) {
+      setLayout({
+        ...layout,
+        sideMenu: 'listing',
+        sideMenuContent: slug
+      });
+    }
+  }, [slug]);
 
   const navigateToListing = () => {
     navigate(`/listing/${slug}`);
