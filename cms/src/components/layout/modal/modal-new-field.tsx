@@ -24,6 +24,7 @@ export interface ModalNewFieldProps {
   inputEditField?: FieldType | null;
   onClose: () => void;
   onFieldConfirm: (field: FieldType) => void;
+  fields: Array<FieldType>;
 }
 
 const ContentCentered = styled('div')`
@@ -46,18 +47,21 @@ export default function ModalNewField({
                                         showOpenModal = false,
                                         onClose,
                                         onFieldConfirm,
-                                        inputEditField = null
+                                        inputEditField = null,
+                                        fields
                                       }: ModalNewFieldProps) {
   const {t} = useTranslation();
   const {reset, setValue, register, control, handleSubmit, getValues, formState: {errors}} = useForm();
   const [fieldTypeSelected, setFieldTypeSelected] = useState<FieldTypeSelect | null>(null);
   const [, forceUpdate] = React.useState(false);
   const [enumValues, setEnumValues] = useState<Array<string>>([]);
+  const [showSourceUrl, setShowSourceUrl] = useState(false);
 
   React.useEffect(() => {
     setFieldTypeSelected(null);
     if (!showOpenModal) {
       reset();
+      setShowSourceUrl(false);
     }
     setEnumValues([]);
   }, [showOpenModal]);
@@ -70,6 +74,9 @@ export default function ModalNewField({
         if (inputEditField.enumValues !== undefined && inputEditField.enumValues !== null) {
           setEnumValues(inputEditField.enumValues.split(','));
         }
+      }
+      if (inputEditField?.makeUrl) {
+        setShowSourceUrl(true);
       }
     }
   }, [inputEditField]);
@@ -113,6 +120,8 @@ export default function ModalNewField({
         enumValues: data.enumValues || null,
         dateType: data.dateType || null,
         numberType: data.numberType || null,
+        makeUrl: data.makeUrl || false,
+        sourceUrl: data.sourceUrl || null,
       };
 
       if (inputEditField !== undefined && inputEditField !== null) {
@@ -225,6 +234,53 @@ export default function ModalNewField({
                         />
                       )}
                     </InputHolder>
+                    {(getValues('textType') && getValues('textType') === 'varchar') && (
+                      <InputHolder withBottomSpacing={false}>
+                        <FormControlLabel control={
+                          <Controller
+                            control={control}
+                            name={'makeUrl'}
+                            defaultValue={inputEditField?.makeUrl || false}
+                            render={({
+                                       field: {onChange, onBlur, value, name, ref},
+                                       fieldState: {invalid, isTouched, isDirty, error},
+                                       formState
+                                     }) => (
+                              <Checkbox
+                                onBlur={onBlur}
+                                onChange={(val: any) => {
+                                  onChange(val);
+                                  setShowSourceUrl(!value);
+                                }}
+                                checked={value}
+                                inputRef={ref}
+                                color={'primary'}
+                                size={'small'} />
+                            )}
+                          />
+                        } label={t('As URL') as string} />
+                      </InputHolder>
+                    )}
+                    {showSourceUrl ? (
+                      <InputHolder>
+                        <FormControl fullWidth>
+                          <InputLabel id="input-source-url-type-label">{t('Source field')}</InputLabel>
+                          <Select
+                            {...register('sourceUrl', {required: true})}
+                            defaultValue={inputEditField?.sourceUrl || fields[0].slug}
+                            labelId="input-source-url-type-label"
+                            id="input-source-url-type"
+                            label={t('Source field')}
+                            onChange={e => {
+                              setValue('sourceUrl', e.target.value);
+                              forceUpdate(n => !n);
+                            }}
+                          >
+                            {fields.filter(it => it.fieldType === 'varchar' && it.slug !== inputEditField?.slug).map((field: FieldType, index: number) => <MenuItem key={`MenuItemFieldType${index}`} value={field.slug}>{field.slug}</MenuItem>)}
+                          </Select>
+                        </FormControl>
+                      </InputHolder>
+                    ) : <></>}
                   </Grid>
                   <Grid item xs={12} md={6}>
                     {(fieldTypeSelected && fieldTypeSelected.ekey === 'enum') && (

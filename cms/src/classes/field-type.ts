@@ -22,4 +22,6 @@ export interface FieldType {
   dateType?: string|null;
   numberType?: string|null;
   values?: Array<string>;
+  makeUrl: boolean;
+  sourceUrl?: string;
 }

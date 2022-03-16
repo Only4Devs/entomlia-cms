@@ -206,7 +206,7 @@ export default function DefineTypesFieldsListing({
         )}
       </BoxContainer>
       <ModalNewField showOpenModal={showOpenModal} onClose={handleShowOpenModalClose}
-                     onFieldConfirm={handleFieldConfirm}
+                     onFieldConfirm={handleFieldConfirm} fields={fields}
                      inputEditField={fieldToEdit !== null ? fieldToEdit.field : null} />
       <DialogConfirmation showDialog={showConfirmation} title={t('Delete confirmation')} onClose={closeConfirmation}
                           onConfirm={confirmDelete} content={t('This operation cannot be undone.')} />
