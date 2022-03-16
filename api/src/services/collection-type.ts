@@ -99,9 +99,13 @@ const createSingleField = async (collectionTypeId: number, field: any) => {
 }
 
 const updateSingleField = async (collectionTypeId: number, field: any) => {
+  const fieldId = field.id
+  delete field.id
+  delete field.values
+
   return await prisma.collectionTypeField.update({
     where: {
-      id: field.id
+      id: fieldId
     },
     data: {
       ...field
