@@ -20,7 +20,21 @@ export default function useContent() {
     }
   };
 
+  const getListing = async (slug: string) => {
+    setShowLoader(true);
+    try {
+      const res = await axios.get(`${API_URL}/content/listing/${slug}`, getHeaderOptions());
+      setShowLoader(false);
+      return res.data;
+    } catch (err: any) {
+      console.log(err);
+      setShowLoader(false);
+      throw err;
+    }
+  };
+
   return {
-    createContent
+    createContent,
+    getListing
   }
 }
