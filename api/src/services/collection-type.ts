@@ -39,6 +39,14 @@ const prepareFields = (fields: any) => {
   return fields
 }
 
+const getFields = async (collectionTypeId: number) => {
+  return await prisma.collectionTypeField.findMany({
+    where: {
+      collectionTypeId: collectionTypeId,
+    },
+  }) as any;
+}
+
 const getBySlug = async (slug: string) => {
   try {
     const result = await prisma.collectionType.findFirst({
@@ -54,11 +62,7 @@ const getBySlug = async (slug: string) => {
       },
     }) as any;
 
-    result.fields = await prisma.collectionTypeField.findMany({
-      where: {
-        collectionTypeId: result.id,
-      },
-    }) as any;
+    result.fields = await getFields(result.id)
     if (result.fields) {
       result.fields = prepareFields(result.fields)
     }
@@ -230,6 +234,7 @@ const deleteCollectionType = async (id: number) => {
 
 export {
   getListing,
+  getFields,
   getBySlug,
   createCollectionType,
   updateCollectionType,

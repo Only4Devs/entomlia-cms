@@ -11,7 +11,6 @@ import {
 const listing = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await getListing()
-    console.log('result', result)
     res.status(200).send(result)
   } catch (e) {
     console.log(e)

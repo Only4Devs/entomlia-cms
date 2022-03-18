@@ -174,6 +174,21 @@ const insertRecord = async (tableName: string, data: any, fields: Array<any>) =>
   return await prismaContent.$queryRawUnsafe(sql)
 }
 
+const listing = async (tableName: string, fields: string[]) => {
+  let result = []
+  fields = fields.map(it => `'${it}'`)
+
+  try {
+    const sql = `SELECT 'id', ${fields.join(', ')}, 'createdAt', 'updatedAt'
+                 FROM ${tableName}`
+    result = await prismaContent.$queryRawUnsafe(sql) as any[]
+  } catch (e) {
+    console.log(e)
+  }
+
+  return result
+}
+
 export {
   generateTableName,
   createTable,
@@ -183,4 +198,5 @@ export {
   addColumn,
   modifyColumn,
   insertRecord,
+  listing
 }
