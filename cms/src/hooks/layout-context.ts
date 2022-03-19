@@ -30,6 +30,7 @@ export interface CollectionTypeField {
   minLength?: number;
   maxLength?: number;
   defaultValue?: string;
+  showOnListing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }

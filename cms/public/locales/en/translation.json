@@ -23,6 +23,7 @@
   "Ekey": "Ekey",
   "Content": "Content",
   "Created At": "Created At",
+  "Updated At": "Updated At",
   "Actions": "Actions",
   "Rows per page": "Rows per page:",
   "of": "of",
@@ -90,6 +91,8 @@
   "Edit record": "Edit record",
   "Back": "Back",
   "Configure": "Configure",
+  "Configure form": "Configure form",
+  "Configure view": "Configure view",
   "As URL": "As URL",
   "Source field": "Source field"
 }

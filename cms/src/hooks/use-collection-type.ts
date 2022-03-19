@@ -73,6 +73,19 @@ export default function useCollectionType() {
     }
   };
 
+  const updateField = async (id: number, data: any) => {
+    setShowLoader(true);
+    try {
+      const res = await axios.put(`${API_URL}/collection-type-field/${id}`, data, getHeaderOptions());
+      setShowLoader(false);
+      return res.data;
+    } catch (err: any) {
+      console.log(err);
+      setShowLoader(false);
+      throw err;
+    }
+  };
+
   return {
     collectionTypes,
     setCollectionTypes,
@@ -80,6 +93,7 @@ export default function useCollectionType() {
     getCollectionType,
     createCollectionType,
     deleteCollectionType,
-    updateCollectionType
+    updateCollectionType,
+    updateField
   }
 }

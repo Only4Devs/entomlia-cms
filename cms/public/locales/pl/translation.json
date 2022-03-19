@@ -23,6 +23,7 @@
   "Ekey": "Ekey",
   "Content": "Treść",
   "Created At": "Data utworzenia",
+  "Updated At": "Data edycji",
   "Actions": "Akcje",
   "Rows per page": "Elementów na stronę:",
   "of": "z",
@@ -90,6 +91,8 @@
   "Edit record": "Edytuj rekord",
   "Back": "Powrót",
   "Configure": "Konfiguruj",
+  "Configure form": "Konfiguruj formularz",
+  "Configure view": "Konfiguruj widok",
   "As URL": "Jako URL",
   "Source field": "Wartość źródłowa"
 }

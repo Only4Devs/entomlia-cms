@@ -24,4 +24,5 @@ export interface FieldType {
   values?: Array<string>;
   makeUrl: boolean;
   sourceUrl?: string;
+  showOnListing?: boolean;
 }

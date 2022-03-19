@@ -8,6 +8,7 @@ import {FieldType} from '../../classes/field-type';
 import DefineTypesFieldsListing from '../../components/field-types/define-types-fields-listing';
 import {Button} from '@mui/material';
 import styled from '@emotion/styled';
+import TableLoader from '../../components/layout/table-loader';
 
 const ButtonContainerStyled = styled('div')`
   margin-top: 20px;
@@ -23,6 +24,7 @@ export default function Configure() {
   const [collectionType, setCollectionType] = useState<CollectionType>();
   const {t} = useTranslation();
   const [fields, setFields] = useState<Array<FieldType>>([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   const changedFields = (fields: Array<FieldType>) => {
     console.log('change---', fields);
@@ -31,6 +33,7 @@ export default function Configure() {
 
   React.useEffect(() => {
     if (slug !== undefined && slug !== null) {
+      setLoading(true);
       setLayout((prevLayout: any) => ({
         ...prevLayout,
         ['sideMenuCollectionType']: slug,
@@ -49,6 +52,7 @@ export default function Configure() {
         if (result?.fields) {
           setFields(result?.fields);
         }
+        setLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -78,13 +82,19 @@ export default function Configure() {
   return (
     collectionType ? (
       <ContainerWithSpace>
-        <DefineTypesFieldsListing inputFields={fields} collectionType={collectionType} onFieldsChange={changedFields} />
-        {fields.length > 0 ? (
-          <ButtonContainerStyled>
-            <Button variant="contained" color="primary" size={'small'}
-                    onClick={saveAndGenerate}>{t('Save & Generate')}</Button>
-          </ButtonContainerStyled>
-        ) : <></>}
+        {loading && <TableLoader />}
+        {!loading && (
+          <>
+            <DefineTypesFieldsListing inputFields={fields} collectionType={collectionType}
+                                      onFieldsChange={changedFields} />
+            {fields.length > 0 ? (
+              <ButtonContainerStyled>
+                <Button variant="contained" color="primary" size={'small'}
+                        onClick={saveAndGenerate}>{t('Save & Generate')}</Button>
+              </ButtonContainerStyled>
+            ) : <></>}
+          </>
+        )}
       </ContainerWithSpace>
     ) : (
       <></>
