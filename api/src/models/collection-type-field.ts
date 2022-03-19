@@ -9,6 +9,7 @@ export default interface CollectionTypeField {
   position?: number;
   minLength?: number;
   maxLength?: number;
+  showOnListing?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }

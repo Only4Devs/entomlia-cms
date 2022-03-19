@@ -78,6 +78,7 @@ model CollectionTypeField {
   minLength        Int?             @default(0)
   maxLength        Int?             @default(0)
   makeUrl          Boolean          @default(false)
+  showOnListing    Boolean          @default(true)
   sourceUrl        String?          @db.VarChar(255)
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt

@@ -39,6 +39,7 @@ server.register(require('./routes/auth'))
 server.register(require('./routes/profile'))
 server.register(require('./routes/admin'))
 server.register(require('./routes/collection-type'))
+server.register(require('./routes/collection-type-field'))
 server.register(require('./routes/form-configuration'))
 server.register(require('./routes/content'))
 

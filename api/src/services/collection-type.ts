@@ -238,5 +238,6 @@ export {
   getBySlug,
   createCollectionType,
   updateCollectionType,
-  deleteCollectionType
+  deleteCollectionType,
+  updateSingleField
 }
