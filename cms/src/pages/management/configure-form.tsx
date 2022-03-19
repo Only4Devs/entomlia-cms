@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import PageTitle from '../../components/layout/common/page-title';
-import {Button} from '@mui/material';
+import {Button, Table} from '@mui/material';
 import BoxContainer from '../../components/layout/common/box-container';
 import ContainerWithSpace from '../../components/layout/container-with-space';
 import {useTranslation} from 'react-i18next';
@@ -10,6 +10,7 @@ import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import useCollectionType from '../../hooks/use-collection-type';
 import useFormConfiguration, {FormConfiguration} from '../../hooks/use-form-configuration';
 import {FieldType} from '../../classes/field-type';
+import TableLoader from '../../components/layout/table-loader';
 
 type Params = {
   slug: string;
@@ -73,9 +74,11 @@ export default function ConfigureForm() {
   const {getFormConfiguration, updateFormConfiguration} = useFormConfiguration();
   const [state, setState] = useState<Array<Array<any>>>([]);
   const [formConfiguration, setFormConfiguration] = useState<FormConfiguration | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     (async () => {
+      setLoading(true);
       const result = await getCollectionType(slug!!);
       const formConfiguration = await getFormConfiguration(slug!!);
       setFormConfiguration(formConfiguration);
@@ -95,8 +98,10 @@ export default function ConfigureForm() {
               loadedState.push(rows);
             }
             setState(loadedState);
+            setLoading(false);
           } else {
             setState([[], [], [], result.fields])
+            setLoading(false);
           }
         }
       }
@@ -172,51 +177,54 @@ export default function ConfigureForm() {
         </div>
       </TopHeaderStyled>
       <BoxContainer>
-        <div style={{display: "flex"}} className={'holder-drag-and-drop'}>
-          <DragDropContext onDragEnd={onDragEnd}>
-            {state.map((el, ind) => (
-              <Droppable key={ind} droppableId={`${ind}`}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
-                    {...provided.droppableProps}
-                  >
-                    {el.map((item, index) => (
-                      <Draggable
-                        key={item.slug}
-                        draggableId={item.slug}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getItemStyle(
-                              snapshot.isDragging,
-                              provided.draggableProps.style
-                            )}
-                          >
+        {!loading && (
+          <div style={{display: "flex"}} className={'holder-drag-and-drop'}>
+            <DragDropContext onDragEnd={onDragEnd}>
+              {state.map((el, ind) => (
+                <Droppable key={ind} droppableId={`${ind}`}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      style={getListStyle(snapshot.isDraggingOver)}
+                      {...provided.droppableProps}
+                    >
+                      {el.map((item, index) => (
+                        <Draggable
+                          key={item.slug}
+                          draggableId={item.slug}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
                             <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-around"
-                              }}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getItemStyle(
+                                snapshot.isDragging,
+                                provided.draggableProps.style
+                              )}
                             >
-                              <div>{item.slug}</div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-around"
+                                }}
+                              >
+                                <div>{item.slug}</div>
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            ))}
-          </DragDropContext>
-        </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              ))}
+            </DragDropContext>
+          </div>
+        )}
+        {loading && <TableLoader />}
       </BoxContainer>
     </ContainerWithSpace>
   );
