@@ -45,6 +45,7 @@ const PopoverContentListStyled = styled('div')`
   padding: 0 10px;
   max-height: 70vh;
   max-width: 320px;
+  min-width: 320px;
 `;
 
 const FormControlLabelStyled = styled(FormControlLabel)`
