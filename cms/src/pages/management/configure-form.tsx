@@ -1,31 +1,20 @@
 import React, {useContext, useState} from 'react';
 import PageTitle from '../../components/layout/common/page-title';
-import {Button, Table} from '@mui/material';
 import BoxContainer from '../../components/layout/common/box-container';
 import ContainerWithSpace from '../../components/layout/container-with-space';
 import {useTranslation} from 'react-i18next';
 import {useNavigate, useParams} from 'react-router-dom';
-import styled from '@emotion/styled';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import useCollectionType from '../../hooks/use-collection-type';
 import useFormConfiguration, {FormConfiguration} from '../../hooks/use-form-configuration';
 import {FieldType} from '../../classes/field-type';
 import TableLoader from '../../components/layout/table-loader';
 import {LayoutContext} from '../../hooks/layout-context';
+import {ButtonTopStyled, TopHeaderStyled} from '../../styled/layout-common';
 
 type Params = {
   slug: string;
 };
-
-const TopHeaderStyled = styled('div')`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const ButtonTopStyled = styled(Button)`
-  margin-left: 15px;
-`;
 
 const reorder = (list: Array<any>, startIndex: number, endIndex: number) => {
   const result = Array.from(list);

@@ -94,5 +94,9 @@
   "Configure form": "Konfiguruj formularz",
   "Configure view": "Konfiguruj widok",
   "As URL": "Jako URL",
-  "Source field": "Wartość źródłowa"
+  "Source field": "Wartość źródłowa",
+  "Add directory": "Dodaj katalog",
+  "Configure sizes": "Konfiguruj rozmiary",
+  "Drag 'n' drop some files here, or click here": "Przeciągnij i upuść pliki tutaj, lub kliknij tutaj",
+  "Not Found": "Nie znaleziono"
 }

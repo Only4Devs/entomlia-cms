@@ -14,12 +14,7 @@ import useCollectionType from '../../hooks/use-collection-type';
 import {FieldType} from '../../classes/field-type';
 import MenuItemLabel from '../../components/layout/side-menu/menu-item-label';
 import TableLoader from '../../components/layout/table-loader';
-
-const TopHeaderStyled = styled('div')`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
+import {ButtonTopStyled, TopHeaderStyled} from '../../styled/layout-common';
 
 const ThRightStyled = styled('th')`
   text-align: right;
@@ -28,10 +23,6 @@ const ThRightStyled = styled('th')`
 const EmptyStateHolderStyled = styled('div')`
   padding-top: 50px;
   padding-bottom: 30px;
-`;
-
-const ButtonTopStyled = styled(Button)`
-  margin-left: 15px;
 `;
 
 const ScrollableTableStyled = styled('div')`
