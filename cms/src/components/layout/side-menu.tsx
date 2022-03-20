@@ -58,6 +58,7 @@ const StylesMenuItem = `
 
   &:hover {
     background-color: #e8e8e8;
+    color: #000;
     cursor: pointer;
   }
 `;

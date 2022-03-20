@@ -27,6 +27,7 @@ const StylesMenuItem = `
 
   &:hover {
     background-color: #e8e8e8;
+    color: #000;
     cursor: pointer;
   }
 `;
@@ -46,7 +47,8 @@ export default function MenuListLink({drawerWidth, pathName, currentPath, to, ic
       <MenuListLinkStyled to={to}
                           className={css`
                             justify-content: ${drawerWidth === 240 ? 'flex-start' : 'center'};
-                            background-color: ${currentPath === pathName ? (darkerActive ? '#d5e2ff' : '#eff4ff') : 'transparent'};
+                            background-color: ${currentPath === pathName ? (darkerActive ? '#3178bf' : '#3178bf') : 'transparent'};
+                            color: ${currentPath === pathName ? '#FFF' : '#000'};
                           `}>
         <MenuIcon icon={icon} />
         {drawerWidth === 240 ? <MenuListItemTitleStyled>{label}</MenuListItemTitleStyled> : <></>}
