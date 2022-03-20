@@ -15,6 +15,21 @@ const FileItemStyled = styled('div')`
   border-radius: 10px;
   margin-right: 8px;
   margin-left: 8px;
+  position: relative;
+  overflow: hidden;
+`;
+
+const FilePreviewStyled = styled('img')`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+`;
+
+const EmptyImageStyled = styled('div')`
+  padding: 50% 0;
 `;
 
 const AddDirectoryStyled = styled('div')`
@@ -53,14 +68,35 @@ const FileUploadLabelStyled = styled('div')`
   text-align: center;
   padding: 0 15px;
   line-height: 123%;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const FileTitleStyled = styled('div')`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #FFF;
+  padding: 50px 5px 5px 5px;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(0deg, rgba(2, 0, 36, 0.8) 0%, rgba(57, 57, 57, 0.8) 35%, rgba(255, 255, 255, 0) 100%);
 `;
 
 export {
   FilesContainerStyled,
   FileItemStyled,
+  FilePreviewStyled,
+  EmptyImageStyled,
   AddDirectoryStyled,
   AddIconStyled,
   AddDirectoryLabelStyled,
   FileUploadStyled,
   FileUploadLabelStyled,
+  FileTitleStyled,
 }

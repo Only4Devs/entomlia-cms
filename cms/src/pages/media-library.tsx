@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import ContainerWithSpace from '../components/layout/container-with-space';
 import {LayoutContext} from '../hooks/layout-context';
 import PageTitle from '../components/layout/common/page-title';
@@ -8,16 +8,23 @@ import {useDropzone} from 'react-dropzone';
 import {
   AddDirectoryLabelStyled,
   AddDirectoryStyled,
-  AddIconStyled,
-  FileItemStyled,
-  FilesContainerStyled, FileUploadLabelStyled, FileUploadStyled
+  AddIconStyled, EmptyImageStyled,
+  FileItemStyled, FilePreviewStyled,
+  FilesContainerStyled, FileTitleStyled, FileUploadLabelStyled, FileUploadStyled
 } from '../styled/media-library';
 import {ButtonTopStyled, TopHeaderStyled} from '../styled/layout-common';
 
 export default function MediaLibrary() {
   const {t} = useTranslation();
   const {layout, setLayout} = useContext(LayoutContext);
-  const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
+  const [filesBeforeUpload, setFilesBeforeUpload] = useState<Array<any>>([]);
+  const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+    onDrop: acceptedFiles => {
+      setFilesBeforeUpload(acceptedFiles.map(file => Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      })));
+    }
+  });
 
   React.useEffect(() => {
     setLayout((prevLayout: any) => ({
@@ -52,9 +59,11 @@ export default function MediaLibrary() {
               <FileUploadLabelStyled>{t('Drag \'n\' drop some files here, or click here')}</FileUploadLabelStyled>
             </FileUploadStyled>
           </FileItemStyled>
-          {acceptedFiles.map((file: any) => (
+          {filesBeforeUpload.map((file: any) => (
             <FileItemStyled key={file.path}>
-              <span>{file.path} - {file.size} bytes</span>
+              <EmptyImageStyled />
+              <FilePreviewStyled src={file.preview} />
+              <FileTitleStyled>{file.path}</FileTitleStyled>
             </FileItemStyled>
           ))}
         </FilesContainerStyled>
