@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import PageTitle from '../../components/layout/common/page-title';
 import {Button, Table} from '@mui/material';
 import BoxContainer from '../../components/layout/common/box-container';
@@ -11,6 +11,7 @@ import useCollectionType from '../../hooks/use-collection-type';
 import useFormConfiguration, {FormConfiguration} from '../../hooks/use-form-configuration';
 import {FieldType} from '../../classes/field-type';
 import TableLoader from '../../components/layout/table-loader';
+import {LayoutContext} from '../../hooks/layout-context';
 
 type Params = {
   slug: string;
@@ -70,6 +71,7 @@ export default function ConfigureForm() {
   const {t} = useTranslation();
   const {slug} = useParams<Params>();
   const navigate = useNavigate();
+  const {layout, setLayout} = useContext(LayoutContext);
   const {getCollectionType} = useCollectionType();
   const {getFormConfiguration, updateFormConfiguration} = useFormConfiguration();
   const [state, setState] = useState<Array<Array<any>>>([]);
@@ -79,6 +81,11 @@ export default function ConfigureForm() {
   React.useEffect(() => {
     (async () => {
       setLoading(true);
+      setLayout({
+        ...layout,
+        sideMenu: 'listing',
+        sideMenuContent: slug!!
+      });
       const result = await getCollectionType(slug!!);
       const formConfiguration = await getFormConfiguration(slug!!);
       setFormConfiguration(formConfiguration);
