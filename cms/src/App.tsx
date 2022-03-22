@@ -21,6 +21,7 @@ import MediaLibrary from './pages/media-library';
 import NewRecord from './pages/management/new-record';
 import EditRecord from './pages/management/edit-record';
 import ConfigureForm from './pages/management/configure-form';
+import MediaSizes from './pages/media-sizes';
 
 function App() {
   const {showLoader, setShowLoader} = useShowLoader(false);
@@ -50,6 +51,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
                     <Route path="/media-library" element={<PrivateRoute><MediaLibrary /></PrivateRoute>} />
+                    <Route path="/media-sizes" element={<PrivateRoute><MediaSizes /></PrivateRoute>} />
                     <Route path="/define-types" element={<PrivateRoute><DefineTypes /></PrivateRoute>} />
                     <Route path="/define-types/*" element={<PrivateRoute><DefineTypes /></PrivateRoute>} />
                     <Route path="/listing/configure/form/:slug" element={<PrivateRoute><ConfigureForm /></PrivateRoute>} />

@@ -12,6 +12,7 @@ import {CollectionType, LayoutContext} from '../../hooks/layout-context';
 import DialogConfirmation from '../dialog/dialog-confirmation';
 import useCollectionType from '../../hooks/use-collection-type';
 import {useNavigate} from 'react-router-dom';
+import {ColumnActionsStyled} from '../../styled/layout-common';
 
 export interface DefineTypesFieldsListingProps {
   inputFields: FieldType[];
@@ -34,10 +35,6 @@ const RowFlexStyled = styled('div')`
 const CellFlexStyled = styled('div')`
   display: flex;
   align-items: center;
-`;
-
-const ColumnActionsStyled = styled('td')`
-  text-align: right;
 `;
 
 const TextUppercaseStyled = styled('div')`

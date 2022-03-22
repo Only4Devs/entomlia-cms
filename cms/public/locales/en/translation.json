@@ -98,5 +98,13 @@
   "Add directory": "Add directory",
   "Configure sizes": "Configure sizes",
   "Drag 'n' drop some files here, or click here": "Drag 'n' drop some files here, or click here",
-  "Not Found": "Not Found"
+  "Not Found": "Not Found",
+  "Configure size": "Configure size",
+  "Width": "Width",
+  "Height": "Height",
+  "Enter width": "Enter width",
+  "Enter height": "Enter height",
+  "Resize mode": "Resize mode",
+  "Resize": "Resize",
+  "Crop": "Crop"
 }

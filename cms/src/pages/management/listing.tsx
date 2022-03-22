@@ -14,19 +14,15 @@ import useCollectionType from '../../hooks/use-collection-type';
 import {FieldType} from '../../classes/field-type';
 import MenuItemLabel from '../../components/layout/side-menu/menu-item-label';
 import TableLoader from '../../components/layout/table-loader';
-import {ButtonTopStyled, TopHeaderStyled} from '../../styled/layout-common';
+import {
+  ButtonTopStyled,
+  EmptyStateHolderStyled,
+  ScrollableTableStyled,
+  TopHeaderStyled
+} from '../../styled/layout-common';
 
 const ThRightStyled = styled('th')`
   text-align: right;
-`;
-
-const EmptyStateHolderStyled = styled('div')`
-  padding-top: 50px;
-  padding-bottom: 30px;
-`;
-
-const ScrollableTableStyled = styled('div')`
-  overflow-y: auto;
 `;
 
 const PopoverContentListStyled = styled('div')`

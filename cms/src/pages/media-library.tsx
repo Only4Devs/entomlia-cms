@@ -13,15 +13,19 @@ import {
   FilesContainerStyled, FileTitleStyled, FileUploadLabelStyled, FileUploadStyled
 } from '../styled/media-library';
 import {ButtonTopStyled, TopHeaderStyled} from '../styled/layout-common';
+import {useNavigate} from 'react-router-dom';
+import LoadingOverlay from '../components/layout/common/loading-overlay';
 
 export default function MediaLibrary() {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const {layout, setLayout} = useContext(LayoutContext);
   const [filesBeforeUpload, setFilesBeforeUpload] = useState<Array<any>>([]);
   const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
     onDrop: acceptedFiles => {
       setFilesBeforeUpload(acceptedFiles.map(file => Object.assign(file, {
-        preview: URL.createObjectURL(file)
+        preview: URL.createObjectURL(file),
+        uploading: true
       })));
     }
   });
@@ -35,7 +39,7 @@ export default function MediaLibrary() {
   }, []);
 
   const configureSizes = () => {
-
+    navigate('/media-sizes');
   };
 
   return (
@@ -55,6 +59,7 @@ export default function MediaLibrary() {
           </FileItemStyled>
           <FileItemStyled>
             <FileUploadStyled {...getRootProps({className: 'dropzone'})}>
+              <AddIconStyled className={'fa fa-upload'} />
               <input {...getInputProps()} />
               <FileUploadLabelStyled>{t('Drag \'n\' drop some files here, or click here')}</FileUploadLabelStyled>
             </FileUploadStyled>
@@ -64,6 +69,7 @@ export default function MediaLibrary() {
               <EmptyImageStyled />
               <FilePreviewStyled src={file.preview} />
               <FileTitleStyled>{file.path}</FileTitleStyled>
+              {file.uploading && <LoadingOverlay />}
             </FileItemStyled>
           ))}
         </FilesContainerStyled>

@@ -98,5 +98,13 @@
   "Add directory": "Dodaj katalog",
   "Configure sizes": "Konfiguruj rozmiary",
   "Drag 'n' drop some files here, or click here": "Przeciągnij i upuść pliki tutaj, lub kliknij tutaj",
-  "Not Found": "Nie znaleziono"
+  "Not Found": "Nie znaleziono",
+  "Configure size": "Konfiguruj rozmiar",
+  "Width": "Szerokość",
+  "Height": "Wysokość",
+  "Enter width": "Wprowadź szerokość",
+  "Enter height": "Wprowadź wysokość",
+  "Resize mode": "Tryb zmiany rozmiaru",
+  "Resize": "Zmień rozmiar (proporcjonalnie)",
+  "Crop": "Zmień rozmiar (przytnij)"
 }

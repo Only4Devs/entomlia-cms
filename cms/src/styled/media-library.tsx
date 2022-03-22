@@ -17,6 +17,7 @@ const FileItemStyled = styled('div')`
   margin-left: 8px;
   position: relative;
   overflow: hidden;
+  min-height: 140px;
 `;
 
 const FilePreviewStyled = styled('img')`
@@ -61,13 +62,19 @@ const FileUploadStyled = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   height: 100%;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const FileUploadLabelStyled = styled('div')`
   text-align: center;
-  padding: 0 15px;
+  padding: 15px 15px 0 15px;
   line-height: 123%;
+  color: #3178bf;
 
   &:hover {
     cursor: pointer;
@@ -82,6 +89,7 @@ const FileTitleStyled = styled('div')`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 12px;
   color: #FFF;
   padding: 50px 5px 5px 5px;
   background: rgb(2, 0, 36);
