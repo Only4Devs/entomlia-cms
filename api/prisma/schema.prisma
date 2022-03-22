@@ -45,6 +45,8 @@ model MediaSize {
   width       Int?       @default(0)
   height      Int?       @default(0)
   mode        String?    @db.VarChar(64)    @default("resize")
+  title       String     @db.VarChar(255)
+  slug        String     @db.VarChar(255)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
