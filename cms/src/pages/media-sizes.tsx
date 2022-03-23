@@ -140,8 +140,8 @@ export default function MediaSizes() {
               {rows.map((row: MediaSize, index: number) => (
                 <tr key={`TableTr${index}`}>
                   <td>{row.title}</td>
-                  <td>{row.width}</td>
-                  <td>{row.height}</td>
+                  <td>{row.width || '-'}</td>
+                  <td>{row.height || '-'}</td>
                   <td>
                     {row.mode === 'crop' ? t('Crop') : ''}
                     {row.mode === 'resize' ? t('Resize') : ''}
