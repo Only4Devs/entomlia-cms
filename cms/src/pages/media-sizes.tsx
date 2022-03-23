@@ -18,6 +18,7 @@ import EmptyState from '../components/layout/common/empty-state';
 import useMediaSize from '../hooks/use-media-size';
 import MediaSize from '../classes/media-size';
 import ActionIcon from '../components/layout/common/action-icon';
+import DialogConfirmation from '../components/dialog/dialog-confirmation';
 
 export default function MediaSizes() {
   const {t} = useTranslation();
@@ -27,6 +28,8 @@ export default function MediaSizes() {
   const [rows, setRows] = React.useState([]);
   const [loading, setLoading] = React.useState<boolean>(true);
   const {getListing, createSize, updateSize, deleteSize} = useMediaSize();
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [rowToDelete, setRowToDelete] = useState<MediaSize | null>(null);
 
   React.useEffect(() => {
     setLoading(true);
@@ -52,8 +55,13 @@ export default function MediaSizes() {
     }
   };
 
-  const handleShowOpenModalClose = async (output: any) => {
+  const handleShowOpenModalClose = () => {
     setShowOpenModal(false);
+  };
+
+  const handleModalResult = async (output: any) => {
+    console.log('output', output);
+    handleShowOpenModalClose();
     if (output !== undefined && output !== null) {
       if (output.id !== undefined && output.id !== null) {
 
@@ -66,7 +74,7 @@ export default function MediaSizes() {
         }
       }
     }
-  };
+  }
 
   const goBack = () => {
     navigate('/media-library');
@@ -81,7 +89,27 @@ export default function MediaSizes() {
   };
 
   const handleDelete = (row: MediaSize, index: number) => {
+    setRowToDelete(row);
+    setShowConfirmation(true);
+  };
 
+  const confirmDelete = async () => {
+    if (rowToDelete !== null) {
+      const index = rows.findIndex((mediaSize: MediaSize) => mediaSize.id === rowToDelete.id);
+      console.log('delete--index', index);
+      try {
+        await deleteSize(rowToDelete.id);
+        await loadListing();
+      } catch (e) {
+        console.log(e);
+      }
+      closeConfirmation();
+    }
+  };
+
+  const closeConfirmation = () => {
+    setRowToDelete(null);
+    setShowConfirmation(false);
   };
 
   return (
@@ -138,7 +166,10 @@ export default function MediaSizes() {
           </EmptyStateHolderStyled>
         )}
       </BoxContainer>
-      <ModalMediaSize showOpenModal={showOpenModal} onClose={handleShowOpenModalClose} />
+      <ModalMediaSize showOpenModal={showOpenModal} onClose={handleShowOpenModalClose}
+                      onModalResult={handleModalResult} />
+      <DialogConfirmation showDialog={showConfirmation} title={t('Delete confirmation')} onClose={closeConfirmation}
+                          onConfirm={confirmDelete} content={t('This operation cannot be undone.')} />
     </ContainerWithSpace>
   )
 }

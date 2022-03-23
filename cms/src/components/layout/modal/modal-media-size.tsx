@@ -18,7 +18,8 @@ import MediaSize from '../../../classes/media-size';
 
 export interface ModalNewFieldProps {
   showOpenModal: boolean;
-  onClose: (output: any) => void;
+  onClose: () => void;
+  onModalResult: (output: any) => void;
 }
 
 const ButtonsContainerStyled = styled('div')`
@@ -31,7 +32,8 @@ const ButtonsContainerStyled = styled('div')`
 
 export default function ModalMediaSize({
                                          showOpenModal = false,
-                                         onClose
+                                         onClose,
+                                         onModalResult
                                        }: ModalNewFieldProps) {
   const {t} = useTranslation();
   const {reset, setValue, register, control, handleSubmit, getValues, formState: {errors}} = useForm();
@@ -57,7 +59,7 @@ export default function ModalMediaSize({
     } else {
       data.height = null;
     }
-    onClose(data);
+    onModalResult(data);
   };
 
   return (
