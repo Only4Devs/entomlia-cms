@@ -52,6 +52,22 @@ const AddIconStyled = styled('i')`
   color: #3178bf;
 `;
 
+const EditIconStyled = styled('i')`
+  font-size: 18px;
+  color: #6fbf73;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+`;
+
+const DeleteIconStyled = styled('i')`
+  font-size: 18px;
+  color: #f50057;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+`;
+
 const AddDirectoryLabelStyled = styled('div')`
   color: #3178bf;
   padding-top: 15px;
@@ -107,4 +123,6 @@ export {
   FileUploadStyled,
   FileUploadLabelStyled,
   FileTitleStyled,
+  EditIconStyled,
+  DeleteIconStyled,
 }

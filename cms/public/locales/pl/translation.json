@@ -106,5 +106,6 @@
   "Enter height": "Wprowadź wysokość",
   "Resize mode": "Tryb zmiany rozmiaru",
   "Resize": "Zmień rozmiar (proporcjonalnie)",
-  "Crop": "Zmień rozmiar (przytnij)"
+  "Crop": "Zmień rozmiar (przytnij)",
+  "Configure directory": "Konfiguruj katalog"
 }

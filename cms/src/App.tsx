@@ -51,6 +51,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
                     <Route path="/media-library" element={<PrivateRoute><MediaLibrary /></PrivateRoute>} />
+                    <Route path="/media-library/:slug" element={<PrivateRoute><MediaLibrary /></PrivateRoute>} />
                     <Route path="/media-sizes" element={<PrivateRoute><MediaSizes /></PrivateRoute>} />
                     <Route path="/define-types" element={<PrivateRoute><DefineTypes /></PrivateRoute>} />
                     <Route path="/define-types/*" element={<PrivateRoute><DefineTypes /></PrivateRoute>} />

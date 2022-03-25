@@ -16,7 +16,7 @@ import InputHolder from '../common/input-holder';
 import {useForm} from 'react-hook-form';
 import MediaSize from '../../../classes/media-size';
 
-export interface ModalNewFieldProps {
+export interface ModalMediaSizeProps {
   showOpenModal: boolean;
   inputEditMediaSize?: MediaSize | null;
   onClose: () => void;
@@ -36,7 +36,7 @@ export default function ModalMediaSize({
                                          onClose,
                                          onModalResult,
                                          inputEditMediaSize = null,
-                                       }: ModalNewFieldProps) {
+                                       }: ModalMediaSizeProps) {
   const {t} = useTranslation();
   const {reset, setValue, register, control, handleSubmit, getValues, formState: {errors}} = useForm();
   const [, forceUpdate] = React.useState(false);
