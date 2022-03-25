@@ -24,6 +24,7 @@ model Admin {
 model MediaLibraryDirectory {
   id          Int        @id @default(autoincrement())
   title       String     @db.VarChar(255)
+  slug        String     @db.VarChar(255)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   MediaLibrary  MediaLibrary[]
