@@ -18,6 +18,7 @@ import MediaSize from '../../../classes/media-size';
 
 export interface ModalNewFieldProps {
   showOpenModal: boolean;
+  inputEditMediaSize?: MediaSize | null;
   onClose: () => void;
   onModalResult: (output: any) => void;
 }
@@ -33,7 +34,8 @@ const ButtonsContainerStyled = styled('div')`
 export default function ModalMediaSize({
                                          showOpenModal = false,
                                          onClose,
-                                         onModalResult
+                                         onModalResult,
+                                         inputEditMediaSize = null,
                                        }: ModalNewFieldProps) {
   const {t} = useTranslation();
   const {reset, setValue, register, control, handleSubmit, getValues, formState: {errors}} = useForm();
@@ -59,8 +61,17 @@ export default function ModalMediaSize({
     } else {
       data.height = null;
     }
+    if (mediaSize !== null) {
+      data.id = mediaSize.id;
+    }
     onModalResult(data);
   };
+
+  React.useEffect(() => {
+    if (inputEditMediaSize !== undefined && inputEditMediaSize !== null) {
+      setMediaSize(inputEditMediaSize);
+    }
+  }, [inputEditMediaSize]);
 
   return (
     <Modal

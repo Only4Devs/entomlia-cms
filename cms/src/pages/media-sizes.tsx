@@ -30,6 +30,7 @@ export default function MediaSizes() {
   const {getListing, createSize, updateSize, deleteSize} = useMediaSize();
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [rowToDelete, setRowToDelete] = useState<MediaSize | null>(null);
+  const [rowToEdit, setRowToEdit] = useState<MediaSize | null>(null);
 
   React.useEffect(() => {
     setLoading(true);
@@ -64,7 +65,8 @@ export default function MediaSizes() {
     handleShowOpenModalClose();
     if (output !== undefined && output !== null) {
       if (output.id !== undefined && output.id !== null) {
-
+        await updateSize(rowToEdit!!.id, output);
+        await loadListing();
       } else {
         try {
           await createSize(output);
@@ -85,7 +87,8 @@ export default function MediaSizes() {
   };
 
   const handleEdit = (row: MediaSize, index: number) => {
-
+    setRowToEdit(row);
+    setShowOpenModal(true);
   };
 
   const handleDelete = (row: MediaSize, index: number) => {
@@ -167,7 +170,7 @@ export default function MediaSizes() {
         )}
       </BoxContainer>
       <ModalMediaSize showOpenModal={showOpenModal} onClose={handleShowOpenModalClose}
-                      onModalResult={handleModalResult} />
+                      onModalResult={handleModalResult} inputEditMediaSize={rowToEdit !== null ? rowToEdit : null} />
       <DialogConfirmation showDialog={showConfirmation} title={t('Delete confirmation')} onClose={closeConfirmation}
                           onConfirm={confirmDelete} content={t('This operation cannot be undone.')} />
     </ContainerWithSpace>
