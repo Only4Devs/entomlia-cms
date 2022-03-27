@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PageTitle from '../../components/layout/common/page-title';
 import {Button} from '@mui/material';
 import {useTranslation} from 'react-i18next';
@@ -7,6 +7,8 @@ import styled from '@emotion/styled';
 import BoxContainer from '../../components/layout/common/box-container';
 import {useNavigate, useParams} from 'react-router-dom';
 import FormRecord from '../../components/content-editor/form-record';
+import useContent from '../../hooks/use-content';
+import {LayoutContext} from '../../hooks/layout-context';
 
 type Params = {
   slug: string;
@@ -23,6 +25,31 @@ export default function EditRecord() {
   const {t} = useTranslation();
   const {slug, id} = useParams<Params>();
   const navigate = useNavigate();
+  const {getRow} = useContent();
+  const [editRecord, setEditRecord] = React.useState<any>(null);
+  const {layout, setLayout} = useContext(LayoutContext);
+
+  React.useEffect(() => {
+    (async () => {
+      if (id !== undefined && id !== null) {
+        if (slug !== undefined && slug !== null) {
+          const record = await getRow(slug, id);
+          console.log('record', record);
+          setEditRecord(record);
+        }
+      }
+    })();
+  }, []);
+
+  React.useEffect(() => {
+    if (slug !== undefined && slug !== null) {
+      setLayout({
+        ...layout,
+        sideMenu: 'listing',
+        sideMenuContent: slug
+      });
+    }
+  }, [slug]);
 
   const navigateToListing = () => {
     navigate(`/listing/${slug}`);
@@ -36,7 +63,11 @@ export default function EditRecord() {
                 onClick={navigateToListing}>{t('Back')}</Button>
       </TopHeaderStyled>
       <BoxContainer>
-        <FormRecord slug={slug!!} id={parseFloat(id!!)} />
+        {editRecord !== null ? (
+          <FormRecord slug={slug!!} id={parseFloat(id!!)} editData={editRecord} />
+        ) : (
+          <></>
+        )}
       </BoxContainer>
     </ContainerWithSpace>
   )

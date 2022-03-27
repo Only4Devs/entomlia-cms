@@ -6,6 +6,7 @@ import {FieldType} from '../../classes/field-type';
 import {useTranslation} from 'react-i18next';
 import {DatePicker, DateTimePicker, TimePicker} from '@mui/lab';
 import {Editor} from '@tinymce/tinymce-react';
+import moment from 'moment';
 
 export interface FormFieldInputProps {
   field: FieldType;
@@ -14,12 +15,32 @@ export interface FormFieldInputProps {
   control: any;
   register: any;
   setValue: any;
+  defaultValue?: any | null;
 }
 
-export default function FormFieldInput({field, index, errors, control, register, setValue}: FormFieldInputProps) {
+export default function FormFieldInput({
+                                         field,
+                                         index,
+                                         errors,
+                                         control,
+                                         register,
+                                         setValue,
+                                         defaultValue = null
+                                       }: FormFieldInputProps) {
   const {t} = useTranslation();
   const editorRef = useRef<any>(null);
-  const [localValue, setLocalValue] = useState(null);
+  const [localValue, setLocalValue] = useState<any>(null);
+
+  React.useEffect(() => {
+    if (field.fieldType === 'date') {
+      if (field.dateType === 'time') {
+        const date = moment(`${moment().format('YYYY-MM-DD')} ${defaultValue}`)
+        setLocalValue(new Date(0, 0, 0, parseFloat(date.format('HH')), parseFloat(date.format('mm'))));
+      } else {
+        setLocalValue(defaultValue);
+      }
+    }
+  }, []);
 
   return (
     <InputHolder key={`FieldBox${index}`}>
@@ -102,7 +123,7 @@ export default function FormFieldInput({field, index, errors, control, register,
       {field.fieldType === 'enum' && field.values ? (
         <Select
           {...register(field.slug!!)}
-          defaultValue={field?.defaultValue || 'null'}
+          defaultValue={defaultValue !== null ? defaultValue : (field?.defaultValue || 'null')}
           labelId="input-default-value-label"
           id="input-default-value"
           label={t('Default value')}
@@ -118,7 +139,7 @@ export default function FormFieldInput({field, index, errors, control, register,
       {field.fieldType === 'editor' ? (
         <Editor
           onInit={(evt, editor) => editorRef.current = editor}
-          initialValue=""
+          initialValue={defaultValue !== null ? defaultValue : ''}
           init={{
             height: 500,
             menubar: false,
@@ -168,13 +189,13 @@ export default function FormFieldInput({field, index, errors, control, register,
             <Controller
               control={control}
               name={field.slug!!}
-              defaultValue={false}
               render={({
                          field: {onChange, onBlur, value, name, ref},
                          fieldState: {invalid, isTouched, isDirty, error},
                          formState
                        }) => (
-                <TextareaAutosize minRows={5} onBlur={onBlur} onChange={onChange} ref={ref} />
+                <TextareaAutosize minRows={5} onBlur={onBlur} onChange={onChange} ref={ref}
+                                  defaultValue={defaultValue !== null ? defaultValue : false} />
               )}
             />
           } label={field.slug!!} />

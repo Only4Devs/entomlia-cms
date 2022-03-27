@@ -119,6 +119,11 @@ export default function Listing() {
     navigate(`/listing/configure/form/${slug}`);
   };
 
+  const navigateEdit = (row: any) => {
+    handleClose();
+    navigate(`/listing/${slug}/edit/${row.id}`);
+  };
+
   return (
     <ContainerWithSpace>
       <TopHeaderStyled>
@@ -215,7 +220,7 @@ export default function Listing() {
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <MenuItem onClick={handleClose}>
+                      <MenuItem onClick={() => navigateEdit(row)}>
                         <MenuIcon icon={'fa fa-edit'} />
                         <MenuItemLabel title={t('Edit')} />
                       </MenuItem>

@@ -20,6 +20,19 @@ export default function useContent() {
     }
   };
 
+  const getRow = async (slug: string, id: number | string) => {
+    setShowLoader(true);
+    try {
+      const res = await axios.get(`${API_URL}/content/${slug}/${id}`, getHeaderOptions());
+      setShowLoader(false);
+      return res.data;
+    } catch (err: any) {
+      console.log(err);
+      setShowLoader(false);
+      throw err;
+    }
+  };
+
   const getListing = async (slug: string) => {
     setShowLoader(true);
     try {
@@ -35,6 +48,7 @@ export default function useContent() {
 
   return {
     createContent,
+    getRow,
     getListing
   }
 }

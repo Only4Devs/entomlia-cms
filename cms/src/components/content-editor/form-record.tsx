@@ -12,6 +12,7 @@ import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import useContent from '../../hooks/use-content';
 import plLocale from 'date-fns/locale/pl';
+import {useNavigate} from 'react-router-dom';
 
 const localeMap = {
   pl: plLocale
@@ -20,6 +21,7 @@ const localeMap = {
 export interface FormRecordProps {
   slug: string;
   id?: number | null;
+  editData?: any | null
 }
 
 const GridButtonBottomStyled = styled(Grid)`
@@ -28,8 +30,9 @@ const GridButtonBottomStyled = styled(Grid)`
   justify-content: flex-end;
 `;
 
-export default function FormRecord({slug, id = null}: FormRecordProps) {
+export default function FormRecord({slug, id = null, editData = null}: FormRecordProps) {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const {createContent} = useContent();
   const [collectionType, setCollectionType] = useState<CollectionType | null>(null);
   const {getCollectionType} = useCollectionType();
@@ -62,7 +65,16 @@ export default function FormRecord({slug, id = null}: FormRecordProps) {
             containers.push(fields);
           }
           setState(containers);
-          console.log(containers)
+          console.log(containers);
+          if (editData !== undefined && editData !== null) {
+            for (const singleField of result.fields) {
+              if (singleField.fieldType === 'boolean') {
+                setValue(singleField.slug, editData[singleField.slug] === 1);
+              } else {
+                setValue(singleField.slug, editData[singleField.slug]);
+              }
+            }
+          }
         }
       }
     })();
@@ -72,6 +84,7 @@ export default function FormRecord({slug, id = null}: FormRecordProps) {
     console.log('on-submit', data, errors);
     try {
       await createContent(data, slug);
+      navigate(`/listing/${slug}`);
     } catch (e) {
       console.log(e);
     }
@@ -87,7 +100,8 @@ export default function FormRecord({slug, id = null}: FormRecordProps) {
                 <Grid item xs={12}>
                   {state[0].map((field, index) => (
                     <FormFieldInput field={field} index={index} errors={errors} control={control} register={register}
-                                    setValue={setValue} key={`Grid0Cell${index}`} />
+                                    setValue={setValue} key={`Grid0Cell${index}`}
+                                    defaultValue={editData !== null ? editData[field.slug!!] : null} />
                   ))}
                 </Grid>
               </Grid>
@@ -95,13 +109,15 @@ export default function FormRecord({slug, id = null}: FormRecordProps) {
                 <Grid item xs={6}>
                   {state[1].map((field, index) => (
                     <FormFieldInput field={field} index={index} errors={errors} control={control} register={register}
-                                    setValue={setValue} key={`Grid1Cell${index}`} />
+                                    setValue={setValue} key={`Grid1Cell${index}`}
+                                    defaultValue={editData !== null ? editData[field.slug!!] : null} />
                   ))}
                 </Grid>
                 <Grid item xs={6}>
                   {state[2].map((field, index) => (
                     <FormFieldInput field={field} index={index} errors={errors} control={control} register={register}
-                                    setValue={setValue} key={`Grid2Cell${index}`} />
+                                    setValue={setValue} key={`Grid2Cell${index}`}
+                                    defaultValue={editData !== null ? editData[field.slug!!] : null} />
                   ))}
                 </Grid>
               </Grid>
@@ -109,7 +125,8 @@ export default function FormRecord({slug, id = null}: FormRecordProps) {
                 <Grid item xs={12}>
                   {state[3].map((field, index) => (
                     <FormFieldInput field={field} index={index} errors={errors} control={control} register={register}
-                                    setValue={setValue} key={`Grid3Cell${index}`} />
+                                    setValue={setValue} key={`Grid3Cell${index}`}
+                                    defaultValue={editData !== null ? editData[field.slug!!] : null} />
                   ))}
                 </Grid>
               </Grid>
