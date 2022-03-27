@@ -18,11 +18,9 @@ import ModalMediaDirectory from '../components/layout/modal/modal-media-director
 import useMediaLibraryDirectory from '../hooks/use-media-library-directory';
 import MediaLibraryDirectory from '../classes/media-library-directory';
 import LoadingOverlay from '../components/layout/common/loading-overlay';
-import MediaSize from '../classes/media-size';
 import useMediaLibrary from '../hooks/use-media-library';
 import MediaLibraryFile from '../classes/media-library-file';
 import DialogConfirmation from '../components/dialog/dialog-confirmation';
-import {FieldType} from '../classes/field-type';
 
 export default function MediaLibrary() {
   const {t} = useTranslation();

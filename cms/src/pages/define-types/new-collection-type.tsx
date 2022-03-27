@@ -90,6 +90,22 @@ export default function NewCollectionType() {
                 />
               </InputHolder>
             </Grid>
+            <Grid item xs={12} md={6}>
+              <InputHolder>
+                <TextField
+                  {...register('icon', {required: true})}
+                  onChange={e => setValue('icon', e.target.value)}
+                  variant={'outlined'}
+                  type={'text'}
+                  className={``}
+                  size={'small'}
+                  placeholder={t('Enter icon')}
+                  label={t('Icon')}
+                  helperText={t(errors.icon?.type)}
+                  error={errors && errors.icon !== undefined}
+                />
+              </InputHolder>
+            </Grid>
           </Grid>
           <Grid container>
             <Grid item xs={12}>
