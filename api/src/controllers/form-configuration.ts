@@ -21,12 +21,12 @@ const getFormConfigurationBySlug = async (req: CustomRequest, res: FastifyReply)
           collectionTypeId: collectionType.id
         }
       })
+    }
+
+    if (formConfiguration.content !== undefined && formConfiguration.content !== null) {
+      formConfiguration.content = JSON.parse(formConfiguration.content)
     } else {
-      if (formConfiguration.content !== undefined && formConfiguration.content !== null) {
-        formConfiguration.content = JSON.parse(formConfiguration.content)
-      } else {
-        formConfiguration.content = [[], [], [], collectionType.fields] as any
-      }
+      formConfiguration.content = [[], [], [], collectionType.fields] as any
     }
 
     res.status(200).send(formConfiguration)
