@@ -21,6 +21,8 @@ import LoadingOverlay from '../components/layout/common/loading-overlay';
 import MediaSize from '../classes/media-size';
 import useMediaLibrary from '../hooks/use-media-library';
 import MediaLibraryFile from '../classes/media-library-file';
+import DialogConfirmation from '../components/dialog/dialog-confirmation';
+import {FieldType} from '../classes/field-type';
 
 export default function MediaLibrary() {
   const {t} = useTranslation();
@@ -35,6 +37,7 @@ export default function MediaLibrary() {
   const [directories, setDirectories] = useState<Array<MediaLibraryDirectory>>([]);
   const [rowToEdit, setRowToEdit] = useState<MediaLibraryDirectory | null>(null);
   const [rowToDelete, setRowToDelete] = useState<MediaLibraryDirectory | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
     onDrop: acceptedFiles => {
       setFilesBeforeUpload(acceptedFiles.map(file => Object.assign(file, {
@@ -101,7 +104,7 @@ export default function MediaLibrary() {
     e.preventDefault();
     e.stopPropagation();
     setRowToDelete(row);
-    // setShowConfirmation(true);
+    setShowConfirmation(true);
   };
 
   const handleModalResult = async (output: any) => {
@@ -128,6 +131,23 @@ export default function MediaLibrary() {
 
   const openMediaLibraryHome = () => {
     navigate('/media-library');
+  };
+
+  const closeConfirmation = () => {
+    setRowToDelete(null);
+    setShowConfirmation(false);
+  };
+
+  const confirmDelete = async () => {
+    if (rowToDelete !== null) {
+      try {
+        await deleteDirectory(rowToDelete.id);
+        await loadDirectories();
+      } catch (e) {
+        console.log(e);
+      }
+      closeConfirmation();
+    }
   };
 
   return (
@@ -190,6 +210,8 @@ export default function MediaLibrary() {
       <ModalMediaDirectory showOpenModal={showOpenModal} onClose={handleShowOpenModalClose}
                            inputEditMediaLibraryDirectory={rowToEdit}
                            onModalResult={handleModalResult} />
+      <DialogConfirmation showDialog={showConfirmation} title={t('Delete confirmation')} onClose={closeConfirmation}
+                          onConfirm={confirmDelete} content={t('This operation cannot be undone.')} />
     </ContainerWithSpace>
   )
 }
