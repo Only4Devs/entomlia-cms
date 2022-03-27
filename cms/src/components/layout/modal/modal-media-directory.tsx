@@ -31,11 +31,11 @@ const ButtonsContainerStyled = styled('div')`
 `;
 
 export default function ModalMediaDirectory({
-                                         showOpenModal = false,
-                                         onClose,
-                                         onModalResult,
-                                         inputEditMediaLibraryDirectory = null,
-                                       }: ModalMediaDirectoryProps) {
+                                              showOpenModal = false,
+                                              onClose,
+                                              onModalResult,
+                                              inputEditMediaLibraryDirectory = null,
+                                            }: ModalMediaDirectoryProps) {
   const {t} = useTranslation();
   const {reset, setValue, register, control, handleSubmit, getValues, formState: {errors}} = useForm();
   const [, forceUpdate] = React.useState(false);
@@ -59,6 +59,7 @@ export default function ModalMediaDirectory({
   React.useEffect(() => {
     if (inputEditMediaLibraryDirectory !== undefined && inputEditMediaLibraryDirectory !== null) {
       setMediaLibraryDirectory(inputEditMediaLibraryDirectory);
+      reset(inputEditMediaLibraryDirectory);
     }
   }, [inputEditMediaLibraryDirectory]);
 

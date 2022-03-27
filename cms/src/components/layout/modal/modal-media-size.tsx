@@ -70,6 +70,7 @@ export default function ModalMediaSize({
   React.useEffect(() => {
     if (inputEditMediaSize !== undefined && inputEditMediaSize !== null) {
       setMediaSize(inputEditMediaSize);
+      reset(inputEditMediaSize);
     }
   }, [inputEditMediaSize]);
 

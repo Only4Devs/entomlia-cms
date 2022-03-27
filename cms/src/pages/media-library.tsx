@@ -74,7 +74,7 @@ export default function MediaLibrary() {
 
   const loadDirectories = async () => {
     const rows: Array<MediaLibraryDirectory> = await getListing();
-    setDirectories(rows);
+    setDirectories([...rows]);
     console.log('rows', rows);
   };
 
@@ -90,12 +90,16 @@ export default function MediaLibrary() {
     setShowOpenModal(false);
   };
 
-  const handleEdit = (row: MediaSize, index: number) => {
+  const handleEdit = (e: React.MouseEvent, row: MediaLibraryDirectory, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
     setRowToEdit(row);
     setShowOpenModal(true);
   };
 
-  const handleDelete = (row: MediaSize, index: number) => {
+  const handleDelete = (e: React.MouseEvent, row: MediaLibraryDirectory, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
     setRowToDelete(row);
     // setShowConfirmation(true);
   };
@@ -110,6 +114,7 @@ export default function MediaLibrary() {
         try {
           await createDirectory(output);
           await loadDirectories();
+          setRowToEdit(null);
         } catch (e) {
           console.log(e);
         }
@@ -157,13 +162,15 @@ export default function MediaLibrary() {
             </FileUploadStyled>
           </FileItemStyled>
           {slug === undefined || slug === null ? (
-            directories.map((dir: MediaLibraryDirectory) => (
+            directories.map((dir: MediaLibraryDirectory, index: number) => (
               <FileItemStyled key={`Dir_${dir.slug}`} onClick={() => openDirectory(dir)}>
                 <AddDirectoryStyled>
                   <AddIconStyled className={'fa fa-folder-open'} />
                   <AddDirectoryLabelStyled>{dir.title}</AddDirectoryLabelStyled>
-                  <EditIconStyled className={'fa fa-edit'} />
-                  <DeleteIconStyled className={'fa fa-trash'} />
+                  <EditIconStyled className={'fa fa-edit'}
+                                  onClick={(e: React.MouseEvent<HTMLElement>) => handleEdit(e, dir, index)} />
+                  <DeleteIconStyled className={'fa fa-trash'}
+                                    onClick={(e: React.MouseEvent<HTMLElement>) => handleDelete(e, dir, index)} />
                 </AddDirectoryStyled>
               </FileItemStyled>
             ))
@@ -181,6 +188,7 @@ export default function MediaLibrary() {
         </FilesContainerStyled>
       </BoxContainer>
       <ModalMediaDirectory showOpenModal={showOpenModal} onClose={handleShowOpenModalClose}
+                           inputEditMediaLibraryDirectory={rowToEdit}
                            onModalResult={handleModalResult} />
     </ContainerWithSpace>
   )
