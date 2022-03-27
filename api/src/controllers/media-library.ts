@@ -1,6 +1,6 @@
 import {FastifyReply} from 'fastify';
 import {CustomRequest} from '../types/custom-request';
-import {createFile, getListing, updateFile} from '../services/media-library';
+import {createFile, deleteFile, getListing, updateFile} from '../services/media-library';
 
 const listing = async (req: CustomRequest, res: FastifyReply) => {
   try {

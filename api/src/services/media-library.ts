@@ -7,8 +7,6 @@ const getListing = async () => {
     result = await prisma.mediaLibrary.findMany({
       select: {
         id: true,
-        title: true,
-        slug: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -21,7 +19,7 @@ const getListing = async () => {
 }
 
 const createFile = async (inputData: any) => {
-  return await prisma.mediaLibraryediaLibraryDirectory.create({
+  return await prisma.mediaLibrary.create({
     data: {
       ...inputData
     }

@@ -188,6 +188,24 @@ const listing = async (tableName: string, fields: string[]) => {
   return result
 }
 
+const getByTableNameAndId = async (tableName: string, id: string | number) => {
+  let result = []
+
+  try {
+    const sql = `SELECT *
+                 FROM ${tableName}
+                 WHERE id = '${id}'`
+    result = await prismaContent.$queryRawUnsafe(sql) as any[]
+    if (result !== undefined && result !== null && result.length > 0) {
+      result = result[0]
+    }
+  } catch (e) {
+    console.log(e)
+  }
+
+  return result
+}
+
 export {
   generateTableName,
   createTable,
@@ -197,5 +215,6 @@ export {
   addColumn,
   modifyColumn,
   insertRecord,
-  listing
+  listing,
+  getByTableNameAndId
 }
