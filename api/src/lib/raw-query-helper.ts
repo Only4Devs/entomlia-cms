@@ -174,6 +174,37 @@ const insertRecord = async (tableName: string, data: any, fields: Array<any>) =>
   return await prismaContent.$queryRawUnsafe(sql)
 }
 
+const updateRow = async (tableName: string, id: string | number, data: any, fields: Array<any>) => {
+  const parts: Array<string> = []
+  for (const field of fields) {
+    if (field.fieldType === 'uuid') {
+      parts.push(`${field.slug} = '${uuidv4()}'`)
+    } else {
+      let value = data[field.slug]
+      if (value === undefined) {
+        value = null
+      }
+      const fieldFound = fields.find((it: any) => it.slug === field.slug)
+      if (fieldFound !== undefined && fieldFound !== null) {
+        if (['varchar', 'enum', 'editor', 'text', 'uuid', 'date'].indexOf(field.fieldType) !== -1) {
+          parts.push(`${field.slug} = '${value}'`)
+        } else {
+          parts.push(`${field.slug} = ${value}`)
+        }
+      } else {
+        parts.push(`${field.slug} = NULL`)
+      }
+    }
+  }
+
+  const sql = `UPDATE ${tableName}
+               SET ${parts.join(', ')}
+               WHERE id = ${id}`
+
+  console.log('sql', sql)
+  return await prismaContent.$queryRawUnsafe(sql)
+}
+
 const listing = async (tableName: string, fields: string[]) => {
   let result = []
 
@@ -215,6 +246,7 @@ export {
   addColumn,
   modifyColumn,
   insertRecord,
+  updateRow,
   listing,
   getByTableNameAndId
 }
