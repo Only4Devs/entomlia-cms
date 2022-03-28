@@ -205,6 +205,14 @@ const updateRow = async (tableName: string, id: string | number, data: any, fiel
   return await prismaContent.$queryRawUnsafe(sql)
 }
 
+const deleteRow = async (tableName: string, id: string | number) => {
+  const sql = `DELETE FROM ${tableName}
+               WHERE id = ${id}`
+
+  console.log('sql', sql)
+  return await prismaContent.$queryRawUnsafe(sql)
+}
+
 const listing = async (tableName: string, fields: string[]) => {
   let result = []
 
@@ -247,6 +255,7 @@ export {
   modifyColumn,
   insertRecord,
   updateRow,
+  deleteRow,
   listing,
   getByTableNameAndId
 }

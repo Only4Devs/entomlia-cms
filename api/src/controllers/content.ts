@@ -1,6 +1,6 @@
 import {FastifyReply} from 'fastify';
 import {CustomRequest} from '../types/custom-request';
-import {getByTableNameAndId, insertRecord, listing, updateRow} from '../lib/raw-query-helper';
+import {getByTableNameAndId, insertRecord, listing, updateRow, deleteRow} from '../lib/raw-query-helper';
 import {getBySlug} from '../services/collection-type';
 import CollectionType from '../models/collection-type';
 import CollectionTypeField from '../models/collection-type-field';
@@ -50,9 +50,23 @@ const updateRecord = async (req: CustomRequest, res: FastifyReply) => {
   }
 }
 
+const deleteRecord = async (req: CustomRequest, res: FastifyReply) => {
+  const slug = req.params.slug
+  const collectionType: CollectionType = await getBySlug(slug)
+
+  try {
+    await deleteRow(collectionType.tableName, req.params.id)
+    res.status(200).send({status: 'ok'})
+  } catch (e) {
+    console.log(e)
+    res.status(400).send({status: 'error'})
+  }
+}
+
 export {
   createRecord,
   updateRecord,
   getListing,
-  getRow
+  getRow,
+  deleteRecord
 }
