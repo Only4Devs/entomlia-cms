@@ -20,6 +20,19 @@ export default function useContent() {
     }
   };
 
+  const updateContent = async (id: string | number, slug: string, data: any) => {
+    setShowLoader(true);
+    try {
+      const res = await axios.put(`${API_URL}/content/${slug}/${id}`, data, getHeaderOptions());
+      setShowLoader(false);
+      return res.data;
+    } catch (err: any) {
+      console.log(err);
+      setShowLoader(false);
+      throw err;
+    }
+  };
+
   const getRow = async (slug: string, id: number | string) => {
     setShowLoader(true);
     try {
@@ -48,6 +61,7 @@ export default function useContent() {
 
   return {
     createContent,
+    updateContent,
     getRow,
     getListing
   }

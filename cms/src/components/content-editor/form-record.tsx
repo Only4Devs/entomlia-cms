@@ -33,7 +33,7 @@ const GridButtonBottomStyled = styled(Grid)`
 export default function FormRecord({slug, id = null, editData = null}: FormRecordProps) {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const {createContent} = useContent();
+  const {createContent, updateContent} = useContent();
   const [collectionType, setCollectionType] = useState<CollectionType | null>(null);
   const {getCollectionType} = useCollectionType();
   const {getFormConfiguration} = useFormConfiguration();
@@ -83,7 +83,11 @@ export default function FormRecord({slug, id = null, editData = null}: FormRecor
   const onSubmit = async (data: any) => {
     console.log('on-submit', data, errors);
     try {
-      await createContent(data, slug);
+      if (editData !== undefined && editData !== null) {
+        await updateContent(editData.id!!, slug, data);
+      } else {
+        await createContent(data, slug);
+      }
       navigate(`/listing/${slug}`);
     } catch (e) {
       console.log(e);
