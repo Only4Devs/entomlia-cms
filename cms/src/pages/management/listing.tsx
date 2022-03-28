@@ -1,18 +1,16 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import ContainerWithSpace from '../../components/layout/container-with-space';
 import {CollectionType, CollectionTypeField, LayoutContext} from '../../hooks/layout-context';
 import PageTitle from '../../components/layout/common/page-title';
 import {useTranslation} from 'react-i18next';
 import styled from '@emotion/styled';
-import {Button, Checkbox, FormControlLabel, Menu, MenuItem, Popover} from '@mui/material';
+import {Button, Checkbox, FormControlLabel, Popover} from '@mui/material';
 import BoxContainer from '../../components/layout/common/box-container';
 import EmptyState from '../../components/layout/common/empty-state';
 import useContent from '../../hooks/use-content';
-import MenuIcon from '../../components/layout/side-menu/menu-icon';
 import useCollectionType from '../../hooks/use-collection-type';
 import {FieldType} from '../../classes/field-type';
-import MenuItemLabel from '../../components/layout/side-menu/menu-item-label';
 import TableLoader from '../../components/layout/table-loader';
 import {
   ButtonTopStyled,
@@ -20,6 +18,8 @@ import {
   ScrollableTableStyled,
   TopHeaderStyled
 } from '../../styled/layout-common';
+import DialogConfirmation from '../../components/dialog/dialog-confirmation';
+import ActionDropdown from '../../components/table/action-dropdown';
 
 const ThRightStyled = styled('th')`
   text-align: right;
@@ -51,11 +51,9 @@ export default function Listing() {
   const {getCollectionType, updateField} = useCollectionType();
   const [rows, setRows] = React.useState([]);
   const [loading, setLoading] = React.useState<boolean>(true);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [anchorPopoverEl, setAnchorPopoverEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const openPopover = Boolean(anchorPopoverEl);
   const [fields, setFields] = React.useState<Array<CollectionTypeField | FieldType>>([]);
+  const [anchorPopoverEl, setAnchorPopoverEl] = React.useState<null | HTMLElement>(null);
+  const openPopover = Boolean(anchorPopoverEl);
 
   React.useEffect(() => {
     if (slug !== undefined && slug !== null) {
@@ -84,23 +82,19 @@ export default function Listing() {
         } catch (e) {
           console.log(e);
         }
-        try {
-          const result = await getListing(slug);
-          setRows(result);
-          setLoading(false);
-        } catch (e) {
-          console.log(e);
-        }
+        await getNewListing()
       })();
     }
   }, [slug]);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const getNewListing = async () => {
+    try {
+      const result = await getListing(slug!!);
+      setRows(result);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handlePopoverClose = () => {
@@ -117,11 +111,6 @@ export default function Listing() {
 
   const navigateToConfigureForm = () => {
     navigate(`/listing/configure/form/${slug}`);
-  };
-
-  const navigateEdit = (row: any) => {
-    handleClose();
-    navigate(`/listing/${slug}/edit/${row.id}`);
   };
 
   return (
@@ -187,7 +176,7 @@ export default function Listing() {
                 {fields.filter(x => x.showOnListing).map((it, index) => <th key={`TableTh${index}`}>{it.title}</th>)}
                 <th>{t('Created At')}</th>
                 <th>{t('Updated At')}</th>
-                <ThRightStyled></ThRightStyled>
+                <ThRightStyled />
               </tr>
               </thead>
               <tbody>
@@ -202,33 +191,7 @@ export default function Listing() {
                   <td>{row[`createdAt`]}</td>
                   <td>{row[`updatedAt`]}</td>
                   <td>
-                    <Button
-                      id="basic-button"
-                      aria-controls={open ? 'basic-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open ? 'true' : undefined}
-                      onClick={handleClick}
-                    >
-                      <MenuIcon icon={'fa fa-ellipsis-h'} />
-                    </Button>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                      }}
-                    >
-                      <MenuItem onClick={() => navigateEdit(row)}>
-                        <MenuIcon icon={'fa fa-edit'} />
-                        <MenuItemLabel title={t('Edit')} />
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <MenuIcon icon={'fa fa-trash'} />
-                        <MenuItemLabel title={t('Delete')} />
-                      </MenuItem>
-                    </Menu>
+                    <ActionDropdown slug={slug!!} id={row[`id`]} index={index} reloadListing={getNewListing} />
                   </td>
                 </tr>
               ))}
