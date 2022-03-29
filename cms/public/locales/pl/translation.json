@@ -107,5 +107,9 @@
   "Resize mode": "Tryb zmiany rozmiaru",
   "Resize": "Zmień rozmiar (proporcjonalnie)",
   "Crop": "Zmień rozmiar (przytnij)",
-  "Configure directory": "Konfiguruj katalog"
+  "Configure directory": "Konfiguruj katalog",
+  "Add field": "Dodaj pole",
+  "Edit type": "Edytuj typ",
+  "Icon": "Ikona",
+  "Enter icon": "Wybierz ikonę"
 }

@@ -12,7 +12,7 @@ import {CollectionType, LayoutContext} from '../../hooks/layout-context';
 import DialogConfirmation from '../dialog/dialog-confirmation';
 import useCollectionType from '../../hooks/use-collection-type';
 import {useNavigate} from 'react-router-dom';
-import {ColumnActionsStyled} from '../../styled/layout-common';
+import {ButtonTopStyled, ColumnActionsStyled} from '../../styled/layout-common';
 
 export interface DefineTypesFieldsListingProps {
   inputFields: FieldType[];
@@ -148,16 +148,26 @@ export default function DefineTypesFieldsListing({
     handleShowOpenModal();
   };
 
+  const goToEditCollection = () => {
+    navigate(`/define-types/edit/${collectionType!.slug}`);
+  };
+
   return (
     <>
       <RowFlexStyled>
         <CellFlexStyled>
           <PageTitle title={`${collectionType !== null ? (collectionType.title + ' | ') : ''}${t('Fields')}`} />
           <Button variant="contained" color="primary" size={'small'}
-                  onClick={handleShowOpenModal}>{t('Add new')}</Button>
+                  onClick={goToEditCollection}>{t('Edit')}</Button>
         </CellFlexStyled>
-        <Button variant="contained" color="error" size={'small'}
-                onClick={handleShowDeleteTableConfirmation}>{t('Delete')}</Button>
+        <CellFlexStyled>
+          <ButtonTopStyled variant="contained" color="primary" size={'small'}
+                  onClick={handleShowOpenModal}>{t('Add field')}</ButtonTopStyled>
+          {collectionType !== null && (
+            <ButtonTopStyled variant="contained" color="error" size={'small'}
+                             onClick={handleShowDeleteTableConfirmation}>{t('Delete')}</ButtonTopStyled>
+          )}
+        </CellFlexStyled>
       </RowFlexStyled>
       <BoxContainer extraVerticalSpace={true}>
         {fields.length === 0 ? (

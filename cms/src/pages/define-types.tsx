@@ -9,6 +9,7 @@ import Configure from './define-types/configure';
 import NotFound from './not-found';
 import DefineTypesHome from './define-types/define-types-home';
 import NewCollectionType from './define-types/new-collection-type';
+import EditCollectionType from './define-types/edit-collection-type';
 
 export default function DefineTypes() {
   const {t} = useTranslation();
@@ -31,6 +32,7 @@ export default function DefineTypes() {
         <Routes>
           <Route path="/" element={<PrivateRoute><DefineTypesHome /></PrivateRoute>} />
           <Route path="/new" element={<PrivateRoute><NewCollectionType /></PrivateRoute>} />
+          <Route path="/edit/:slug" element={<PrivateRoute><EditCollectionType /></PrivateRoute>} />
           <Route path="/configure/:slug" element={<PrivateRoute><Configure /></PrivateRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
