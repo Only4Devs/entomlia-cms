@@ -80,8 +80,36 @@ const updateFile = async (mediaLibraryId: number, inputData: any) => {
   })
 }
 
+const removeDirectory = (directoryId: number | null = null, mediaFileId: number) => {
+  return new Promise(resolve => {
+    if (directoryId !== null) {
+      fs.rmdir(`${__dirname}/../../public/storage/d${directoryId}/f${mediaFileId}`, {recursive: true}, (err) => {
+        if (err) {
+          console.log(err)
+        }
+        resolve(true)
+      })
+    } else {
+      fs.rmdir(`${__dirname}/../../public/storage/f${mediaFileId}`, {recursive: true}, (err) => {
+        if (err) {
+          console.log(err)
+        }
+        resolve(true)
+      })
+    }
+  })
+}
+
 const deleteFile = async (id: number) => {
   try {
+    const mediaLibrary = await prisma.mediaLibrary.findFirst({
+      where: {
+        id
+      }
+    })
+    if (mediaLibrary !== null) {
+      await removeDirectory(mediaLibrary.mediaLibraryDirectoryId, mediaLibrary.id)
+    }
     await prisma.mediaLibrary.delete({
       where: {
         id

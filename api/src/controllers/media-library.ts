@@ -1,6 +1,7 @@
 import {FastifyReply} from 'fastify';
 import {CustomRequest} from '../types/custom-request';
 import {createFile, deleteFile, getListing, handleFileUpload, updateFile} from '../services/media-library';
+import {config} from '../config/config';
 
 const listing = async (req: CustomRequest, res: FastifyReply) => {
   try {
@@ -15,7 +16,7 @@ const listing = async (req: CustomRequest, res: FastifyReply) => {
 
 const create = async (req: CustomRequest, res: FastifyReply) => {
   try {
-    const result = await createFile(req.body);
+    const result: any = await createFile(req.body);
     console.log('result', result)
     const key = 'file';
     const files = req.raw.files
@@ -27,6 +28,11 @@ const create = async (req: CustomRequest, res: FastifyReply) => {
         console.log(e)
       }
     }
+    result.path = `${config.host}/public/storage`
+    if (result.mediaLibraryDirectoryId !== undefined && result.mediaLibraryDirectoryId !== null) {
+      result.path += `/d${result.mediaLibraryDirectoryId}`
+    }
+    result.path += `/f${result.id}/${result.filename}`
     res.status(201).send(result)
   } catch (e) {
     console.log(e)
