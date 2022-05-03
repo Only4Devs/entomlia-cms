@@ -35,6 +35,9 @@ model MediaLibrary {
   filename    String?    @db.VarChar(255)
   width       Int?       @default(0)
   height      Int?       @default(0)
+  uid         String     @db.VarChar(255)
+  mimetype    String     @db.VarChar(96)
+  size        Int        @default(0)
   mediaLibraryDirectoryId Int?
   MediaLibraryDirectory   MediaLibraryDirectory?   @relation(fields: [mediaLibraryDirectoryId], references: [id])
   createdAt   DateTime   @default(now())

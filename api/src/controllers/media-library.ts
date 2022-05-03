@@ -1,11 +1,11 @@
 import {FastifyReply} from 'fastify';
 import {CustomRequest} from '../types/custom-request';
-import {createFile, deleteFile, getListing, updateFile} from '../services/media-library';
+import {createFile, deleteFile, getListing, handleFileUpload, updateFile} from '../services/media-library';
 
 const listing = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const slug = req.params.slug || null
-    const result = await getListing()
+    const result = await getListing(slug)
     res.status(200).send(result)
   } catch (e) {
     console.log(e)
@@ -17,6 +17,16 @@ const create = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await createFile(req.body);
     console.log('result', result)
+    const key = 'file';
+    const files = req.raw.files
+    console.log('files', files)
+    if (files[key] !== undefined && files[key] !== null) {
+      try {
+        await handleFileUpload(files[key], req.body.mediaLibraryDirectoryId || null, result.id)
+      } catch (e) {
+        console.log(e)
+      }
+    }
     res.status(201).send(result)
   } catch (e) {
     console.log(e)

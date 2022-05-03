@@ -3,6 +3,8 @@ export default interface MediaLibrary {
   filename?: string;
   width?: number;
   height?: number;
-  createdAt?: Date|string;
-  updatedAt?: Date|string;
+  uid: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  path?: string;
 }

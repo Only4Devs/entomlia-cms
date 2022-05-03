@@ -1,5 +1,6 @@
 import {fastify} from 'fastify';
 import pino from 'pino';
+import path from 'path';
 
 const Port = process.env.PORT || 7000;
 const server = fastify({
@@ -24,6 +25,13 @@ server.register(require('fastify-bcrypt'), {
 server.register(require('fastify-compress'), {
   global: true,
   encodings: ['deflate', 'gzip']
+})
+
+server.register(require('fastify-file-upload'))
+
+server.register(require('@fastify/static'), {
+  root: path.join(__dirname, '../public'),
+  prefix: '/public/',
 })
 
 server.register(require('fastify-cors'), {
