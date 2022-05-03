@@ -38,7 +38,6 @@ export default function NewCollectionType() {
   }, []);
 
   const changedFields = (fields: Array<FieldType>) => {
-    console.log('changedFields', fields)
     setFields([...fields]);
   };
 
@@ -53,9 +52,7 @@ export default function NewCollectionType() {
   const saveAndGenerate = async () => {
     try {
       data.fields = fields;
-      console.log('data', data);
       const result = await createCollectionType(data);
-      console.log('result', result);
       const rows = await getCollectionTypes() as Array<CollectionType>;
       setLayout((prevLayout: any) => ({
         ...prevLayout,

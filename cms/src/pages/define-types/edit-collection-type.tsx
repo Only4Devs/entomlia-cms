@@ -44,7 +44,6 @@ export default function EditCollectionType() {
   }
 
   const onDataSubmit = async (data: any) => {
-    console.log('onDataSubmit', data);
     try {
       await updateCollectionType(collectionType!!.id, data);
       const rows = await getCollectionTypes() as Array<CollectionType>;

@@ -28,7 +28,6 @@ export default function ModalCollectionType({onDataSubmit, showFields, inputEdit
   }, [inputEdit]);
 
   const onSubmit = async (data: any) => {
-    console.log('data', data);
     console.log('errors', errors);
     onDataSubmit(data);
   };

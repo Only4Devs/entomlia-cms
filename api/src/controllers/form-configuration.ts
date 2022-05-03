@@ -39,7 +39,6 @@ const getFormConfigurationBySlug = async (req: CustomRequest, res: FastifyReply)
 const update = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await updateFormConfiguration(parseFloat(req.params.id), req.body);
-    console.log('result', result)
     res.status(200).send({status: 'ok'})
   } catch (e) {
     console.log(e)

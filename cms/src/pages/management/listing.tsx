@@ -141,7 +141,6 @@ export default function Listing() {
                     <Checkbox
                       checked={it.showOnListing}
                       onChange={(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-                        console.log('event.target.checked', event.target.checked, checked);
                         it.showOnListing = checked;
                         fields[index].showOnListing = checked;
                         setFields([...fields]);

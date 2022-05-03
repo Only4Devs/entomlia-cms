@@ -49,7 +49,6 @@ export default function FormRecord({slug, id = null, editData = null}: FormRecor
       const formConfiguration = await getFormConfiguration(slug);
       setFormConfiguration(formConfiguration);
       if (result !== undefined && result !== null) {
-        console.log('formConfiguration.content', formConfiguration.content);
         if (formConfiguration.content !== null) {
           const containers = [];
           for (let i = 0; i < formConfiguration.content.length; i++) {
@@ -65,7 +64,6 @@ export default function FormRecord({slug, id = null, editData = null}: FormRecor
             containers.push(fields);
           }
           setState(containers);
-          console.log(containers);
           if (editData !== undefined && editData !== null) {
             for (const singleField of result.fields) {
               if (singleField.fieldType === 'boolean') {
@@ -81,7 +79,6 @@ export default function FormRecord({slug, id = null, editData = null}: FormRecor
   }, []);
 
   const onSubmit = async (data: any) => {
-    console.log('on-submit', data, errors);
     try {
       if (editData !== undefined && editData !== null) {
         await updateContent(editData.id!!, slug, data);

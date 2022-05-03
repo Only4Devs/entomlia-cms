@@ -69,7 +69,6 @@ export default function MediaLibrary() {
   }, []);
 
   React.useEffect(() => {
-    console.log('dir---slug', slug);
     if (slug === undefined || slug === null) {
       setMediaDirectory(null);
       setFiles([]);
@@ -83,7 +82,6 @@ export default function MediaLibrary() {
       try {
         const response = await getFiles(slug || null);
         setFiles(response);
-        console.log('files response', response);
       } catch (e) {
         console.log(e);
       }
@@ -91,17 +89,14 @@ export default function MediaLibrary() {
   }, [slug]);
 
   React.useEffect(() => {
-    console.log('filesBeforeUpload-1', filesBeforeUpload);
     if (filesBeforeUpload.length > 0) {
       const currentUploading = filesBeforeUpload.filter(file => file.currentUploading);
-      console.log('currentUploading', currentUploading);
       if (currentUploading.length === 0) {
         filesBeforeUpload[0].currentUploading = true;
         setFilesBeforeUpload([...filesBeforeUpload]);
         uploadSingleFile(filesBeforeUpload[0]);
       }
     }
-    console.log('filesBeforeUpload-2', filesBeforeUpload);
   }, [filesBeforeUpload]);
 
   const handleClosePleaseWait = () => {
@@ -109,7 +104,6 @@ export default function MediaLibrary() {
   };
 
   const uploadSingleFile = async (file: any) => {
-    console.log('uploadSingleFile', file);
     try {
       const result = await uploadFile(mediaDirectory !== null ? mediaDirectory.id : null, file);
       filesBeforeUpload.splice(0, 1);
@@ -124,7 +118,6 @@ export default function MediaLibrary() {
   const loadDirectories = async () => {
     const rows: Array<MediaLibraryDirectory> = await getListing();
     setDirectories([...rows]);
-    console.log('rows', rows);
     if (slug !== undefined && slug !== null) {
       const found = rows.find(dir => dir.slug === slug);
       if (found !== undefined) {
@@ -227,7 +220,6 @@ export default function MediaLibrary() {
   };
 
   const confirmDeleteFile = async () => {
-    console.log('confirmDeleteFile', fileToDelete);
     if (fileToDelete !== null) {
       try {
         await deleteFile(fileToDelete.id);

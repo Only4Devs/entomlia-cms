@@ -21,7 +21,6 @@ const listing = async (req: CustomRequest, res: FastifyReply) => {
 const getCollectionTypeBySlug = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await getBySlug(req.params.slug)
-    console.log('result', result)
     res.status(200).send(result)
   } catch (e) {
     console.log(e)
@@ -32,7 +31,6 @@ const getCollectionTypeBySlug = async (req: CustomRequest, res: FastifyReply) =>
 const create = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await createCollectionType(req.body);
-    console.log('result', result)
     res.status(201).send(result)
   } catch (e) {
     console.log(e)
@@ -43,7 +41,6 @@ const create = async (req: CustomRequest, res: FastifyReply) => {
 const update = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await updateCollectionType(parseFloat(req.params.id), req.body);
-    console.log('result', result)
     res.status(201).send({status: 'ok'})
   } catch (e) {
     console.log(e)
@@ -54,7 +51,6 @@ const update = async (req: CustomRequest, res: FastifyReply) => {
 const deleteCollection = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await deleteCollectionType(parseFloat(req.params.id));
-    console.log('result', result)
     res.status(201).send({status: 'ok'})
   } catch (e) {
     console.log(e)

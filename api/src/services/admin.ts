@@ -21,8 +21,6 @@ const validatePassword = async (admin: Admin, password: string, fastify: CustomF
   let result = false;
 
   try {
-    console.log('1', password);
-    console.log('2', admin.password);
     result = await fastify.bcrypt.compare(password, admin.password);
   } catch (e) {
     console.log(e);

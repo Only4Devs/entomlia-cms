@@ -34,7 +34,6 @@ export default function EditRecord() {
       if (id !== undefined && id !== null) {
         if (slug !== undefined && slug !== null) {
           const record = await getRow(slug, id);
-          console.log('record', record);
           setEditRecord(record);
         }
       }

@@ -78,7 +78,6 @@ export default function ConfigureForm() {
       const result = await getCollectionType(slug!!);
       const formConfiguration = await getFormConfiguration(slug!!);
       setFormConfiguration(formConfiguration);
-      console.log('formConfiguration', formConfiguration);
       if (result !== undefined && result !== null) {
         if (formConfiguration !== undefined && formConfiguration !== null) {
           if (formConfiguration.content !== undefined && formConfiguration.content !== null) {
@@ -136,7 +135,6 @@ export default function ConfigureForm() {
   }
 
   const saveFormConfiguration = async () => {
-    console.log('saveFormConfiguration', state);
     const result = [];
     let position = 0;
     for (let container of state) {
@@ -150,7 +148,6 @@ export default function ConfigureForm() {
       }
       result.push(fields);
     }
-    console.log('res-fields', result);
 
     if (formConfiguration !== undefined && formConfiguration !== null) {
       try {

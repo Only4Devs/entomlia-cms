@@ -156,7 +156,6 @@ const updateMediaSize = async (directoryId: number | null, mediaFileId: number, 
 }
 
 const handleFileUpload = async (file: any, directoryId: number | null, mediaFileId: number) => {
-  console.log('handleFileUpload', file, directoryId, mediaFileId)
   let pathFile = ''
   let dirPath = `${__dirname}/../../public/storage`
   if (directoryId !== null) {
@@ -170,9 +169,7 @@ const handleFileUpload = async (file: any, directoryId: number | null, mediaFile
     await ensureDirectoryExists(pathFile)
   }
   fs.writeFile(`${pathFile}/${file.name}`, file.data, async (e) => {
-    console.log('file-creation', e)
     if (e === null) {
-      console.log('mimetype', file.mimetype, file.mimetype.indexOf('image') !== -1)
       if (file.mimetype.indexOf('image') !== -1) {
         await updateMediaSize(directoryId, mediaFileId, file.name)
         await createThumb(200, 200, dirPath, file.name)

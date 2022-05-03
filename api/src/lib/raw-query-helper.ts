@@ -15,8 +15,6 @@ const generateTableName = (tableName: string) => {
 }
 
 const createTable = async (tableData: any, columnsData: Array<any>) => {
-  console.log('table-data', tableData)
-  console.log('columns-data', columnsData)
   let sqlFields = ''
   let sqlUniqueKeys = ''
   for (let field of columnsData) {

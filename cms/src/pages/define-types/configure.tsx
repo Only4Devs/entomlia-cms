@@ -27,7 +27,6 @@ export default function Configure() {
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const changedFields = (fields: Array<FieldType>) => {
-    console.log('change---', fields);
     setFields([...fields]);
   };
 
@@ -64,9 +63,7 @@ export default function Configure() {
       try {
         const data = collectionType;
         data.fields = fields;
-        console.log('data', data);
         const result = await updateCollectionType(collectionType!.id, data);
-        console.log('result', result);
         const rows = await getCollectionTypes() as Array<CollectionType>;
         setLayout((prevLayout: any) => ({
           ...prevLayout,

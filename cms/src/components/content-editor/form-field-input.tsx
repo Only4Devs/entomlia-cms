@@ -67,7 +67,6 @@ export default function FormFieldInput({
           ampm={false}
           onChange={(newValue) => {
             setValue(field.slug!!, newValue);
-            console.log(newValue);
             if (newValue !== undefined && newValue !== null) {
               setLocalValue(newValue);
             }

@@ -11,7 +11,6 @@ const authenticate = async (req: CustomRequest, res: FastifyReply, fastify: Cust
     console.log(e);
   }
 
-  console.log('admin', admin)
   if (admin !== null) {
     if (await validatePassword(admin, req.body.password, fastify)) {
       const token = fastify.jwt.sign({

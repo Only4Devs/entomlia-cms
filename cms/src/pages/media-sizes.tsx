@@ -61,7 +61,6 @@ export default function MediaSizes() {
   };
 
   const handleModalResult = async (output: any) => {
-    console.log('output', output);
     handleShowOpenModalClose();
     if (output !== undefined && output !== null) {
       if (output.id !== undefined && output.id !== null) {
@@ -99,7 +98,6 @@ export default function MediaSizes() {
   const confirmDelete = async () => {
     if (rowToDelete !== null) {
       const index = rows.findIndex((mediaSize: MediaSize) => mediaSize.id === rowToDelete.id);
-      console.log('delete--index', index);
       try {
         await deleteSize(rowToDelete.id);
         await loadListing();

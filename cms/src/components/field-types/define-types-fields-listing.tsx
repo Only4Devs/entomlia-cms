@@ -116,7 +116,6 @@ export default function DefineTypesFieldsListing({
   };
 
   const confirmDelete = () => {
-    console.log('field-to-delete', fieldToDelete);
     if (fieldToDelete !== null) {
       const index = fields.findIndex((field: FieldType) => field.id === fieldToDelete.id);
       fields[index].toDelete = true;

@@ -48,7 +48,6 @@ export default function ModalMediaDirectory({
   }, [showOpenModal]);
 
   const onSubmit = async (data: any) => {
-    console.log('data', data);
     console.log('errors', errors);
     if (mediaLibraryDirectory !== null) {
       data.id = mediaLibraryDirectory.id;

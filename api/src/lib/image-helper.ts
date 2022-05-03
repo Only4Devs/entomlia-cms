@@ -6,7 +6,6 @@ const createThumb = async (width: number = 150, height: number = 150, location: 
     .jpeg({quality: 80})
     .toFile(`${location}/thumb.jpeg`)
     .then((data: any) => {
-      console.log('sharp-thumb', data)
       return true
     })
     .catch((err: any) => {

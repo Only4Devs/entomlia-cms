@@ -17,10 +17,8 @@ const listing = async (req: CustomRequest, res: FastifyReply) => {
 const create = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result: any = await createFile(req.body);
-    console.log('result', result)
     const key = 'file';
     const files = req.raw.files
-    console.log('files', files)
     if (files[key] !== undefined && files[key] !== null) {
       try {
         await handleFileUpload(files[key], req.body.mediaLibraryDirectoryId || null, result.id)
@@ -43,7 +41,6 @@ const create = async (req: CustomRequest, res: FastifyReply) => {
 const update = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await updateFile(parseFloat(req.params.id), req.body);
-    console.log('result', result)
     res.status(201).send({status: 'ok'})
   } catch (e) {
     console.log(e)
@@ -54,7 +51,6 @@ const update = async (req: CustomRequest, res: FastifyReply) => {
 const remove = async (req: CustomRequest, res: FastifyReply) => {
   try {
     const result = await deleteFile(parseFloat(req.params.id));
-    console.log('result', result)
     res.status(201).send({status: 'ok'})
   } catch (e) {
     console.log(e)

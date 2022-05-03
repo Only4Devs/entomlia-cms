@@ -10,7 +10,6 @@ export default function useLogout() {
         method: 'POST',
         url: `${API_URL}/auth/logout`,
       });
-      console.log(res);
       localStorage.removeItem(TOKEN_KEY);
       return true;
     } catch (err) {

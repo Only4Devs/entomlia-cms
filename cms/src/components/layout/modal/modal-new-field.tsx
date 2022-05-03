@@ -97,7 +97,6 @@ export default function ModalNewField({
   }
 
   const onSubmit = async (data: any) => {
-    console.log('data', data);
     console.log('errors', errors);
     if (fieldTypeSelected !== null) {
       let fieldTypeValue = fieldTypeSelected.ekey;

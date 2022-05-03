@@ -49,7 +49,6 @@ export default function ModalMediaSize({
   }, [showOpenModal]);
 
   const onSubmit = async (data: any) => {
-    console.log('data', data);
     console.log('errors', errors);
     if (data.width !== undefined && data.width !== null) {
       data.width = parseFloat(data.width);
