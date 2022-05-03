@@ -43,8 +43,22 @@ export default function useMediaLibrary() {
     }
   };
 
+  const deleteFile = async (mediaFileId: number) => {
+    setShowLoader(true);
+    try {
+      const res = await axios.delete(`${API_URL}/media-library/${mediaFileId}`, getHeaderOptions());
+      setShowLoader(false);
+      return res.data;
+    } catch (err: any) {
+      console.log(err);
+      setShowLoader(false);
+      throw err;
+    }
+  };
+
   return {
     getFiles,
     uploadFile,
+    deleteFile,
   }
 }

@@ -27,7 +27,7 @@ export default function MediaLibrary() {
   const {t} = useTranslation();
   const {slug} = useParams();
   const navigate = useNavigate();
-  const {getFiles, uploadFile} = useMediaLibrary();
+  const {getFiles, uploadFile, deleteFile} = useMediaLibrary();
   const [files, setFiles] = useState<Array<MediaLibraryFile>>([]);
   const {getListing, createDirectory, updateDirectory, deleteDirectory} = useMediaLibraryDirectory();
   const {layout, setLayout} = useContext(LayoutContext);
@@ -37,7 +37,9 @@ export default function MediaLibrary() {
   const [directories, setDirectories] = useState<Array<MediaLibraryDirectory>>([]);
   const [rowToEdit, setRowToEdit] = useState<MediaLibraryDirectory | null>(null);
   const [rowToDelete, setRowToDelete] = useState<MediaLibraryDirectory | null>(null);
+  const [fileToDelete, setFileToDelete] = useState<MediaLibraryFile | null>(null);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const [showConfirmationFile, setShowConfirmationFile] = useState<boolean>(false);
   const [openPleaseWait, setOpenPleaseWait] = useState<boolean>(false);
   const {acceptedFiles, getRootProps, getInputProps,} = useDropzone({
     disabled: filesBeforeUpload.length > 0,
@@ -109,9 +111,11 @@ export default function MediaLibrary() {
   const uploadSingleFile = async (file: any) => {
     console.log('uploadSingleFile', file);
     try {
-      await uploadFile(mediaDirectory !== null ? mediaDirectory.id : null, file);
+      const result = await uploadFile(mediaDirectory !== null ? mediaDirectory.id : null, file);
       filesBeforeUpload.splice(0, 1);
       setFilesBeforeUpload([...filesBeforeUpload]);
+      files.push(result);
+      setFiles([...files]);
     } catch (e: any) {
       console.log(e);
     }
@@ -161,6 +165,15 @@ export default function MediaLibrary() {
     }
   };
 
+  const handleDeleteFile = (e: React.MouseEvent, row: MediaLibraryFile) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (canDoActionIfNotUploading()) {
+      setFileToDelete(row);
+      setShowConfirmationFile(true);
+    }
+  };
+
   const handleModalResult = async (output: any) => {
     handleShowOpenModalClose();
     if (output !== undefined && output !== null) {
@@ -196,6 +209,11 @@ export default function MediaLibrary() {
     setShowConfirmation(false);
   };
 
+  const closeConfirmationFile = () => {
+    setFileToDelete(null);
+    setShowConfirmationFile(false);
+  };
+
   const confirmDelete = async () => {
     if (rowToDelete !== null) {
       try {
@@ -205,6 +223,24 @@ export default function MediaLibrary() {
         console.log(e);
       }
       closeConfirmation();
+    }
+  };
+
+  const confirmDeleteFile = async () => {
+    console.log('confirmDeleteFile', fileToDelete);
+    if (fileToDelete !== null) {
+      try {
+        await deleteFile(fileToDelete.id);
+
+        const index = files.findIndex(it => it.id === fileToDelete.id);
+        if (index !== -1) {
+          files.splice(index, 1);
+          setFiles([...files]);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      closeConfirmationFile();
     }
   };
 
@@ -277,12 +313,13 @@ export default function MediaLibrary() {
           {files.map((file: any) => (
             <FileItemStyled key={`file${file.id}`}>
               <EmptyImageStyled />
+
               <FilePreviewStyled src={file.path} />
               <FileTitleStyled>{file.filename}</FileTitleStyled>
               <EditIconStyled className={'fa fa-edit'}
-                              onClick={(e: React.MouseEvent<HTMLElement>) => null} />
+                              onClick={(e: React.MouseEvent<HTMLElement>) => console.log('edit', e)} />
               <DeleteIconStyled className={'fa fa-trash'}
-                                onClick={(e: React.MouseEvent<HTMLElement>) => null} />
+                                onClick={(e: React.MouseEvent<HTMLElement>) => handleDeleteFile(e, file)} />
             </FileItemStyled>
           ))}
         </FilesContainerStyled>
@@ -292,6 +329,9 @@ export default function MediaLibrary() {
                            onModalResult={handleModalResult} />
       <DialogConfirmation showDialog={showConfirmation} title={t('Delete confirmation')} onClose={closeConfirmation}
                           onConfirm={confirmDelete} content={t('This operation cannot be undone.')} />
+      <DialogConfirmation showDialog={showConfirmationFile} title={t('Delete confirmation')}
+                          onClose={closeConfirmationFile}
+                          onConfirm={confirmDeleteFile} content={t('This operation cannot be undone.')} />
       <Snackbar
         open={openPleaseWait}
         autoHideDuration={6000}

@@ -58,6 +58,10 @@ const EditIconStyled = styled('i')`
   position: absolute;
   left: 10px;
   top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const DeleteIconStyled = styled('i')`
@@ -66,6 +70,10 @@ const DeleteIconStyled = styled('i')`
   position: absolute;
   right: 10px;
   top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const AddDirectoryLabelStyled = styled('div')`
