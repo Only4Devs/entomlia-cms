@@ -24,7 +24,27 @@ export default function useMediaLibrary() {
     }
   };
 
+  const uploadFile = async (directory: number | null, file: any) => {
+    setShowLoader(true);
+    try {
+      const inputData = new FormData();
+      if (directory !== null) {
+        inputData.append('mediaLibraryDirectoryId', directory.toString());
+      }
+      inputData.append('filename', file.name);
+      inputData.append('file', file, file.name);
+      const res = await axios.post(`${API_URL}/media-library`, inputData, getHeaderOptions());
+      setShowLoader(false);
+      return res.data;
+    } catch (err: any) {
+      console.log(err);
+      setShowLoader(false);
+      throw err;
+    }
+  };
+
   return {
     getFiles,
+    uploadFile,
   }
 }

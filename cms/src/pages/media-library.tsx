@@ -21,26 +21,31 @@ import LoadingOverlay from '../components/layout/common/loading-overlay';
 import useMediaLibrary from '../hooks/use-media-library';
 import MediaLibraryFile from '../classes/media-library-file';
 import DialogConfirmation from '../components/dialog/dialog-confirmation';
+import {Alert, Snackbar} from '@mui/material';
 
 export default function MediaLibrary() {
   const {t} = useTranslation();
   const {slug} = useParams();
   const navigate = useNavigate();
-  const {getFiles} = useMediaLibrary();
+  const {getFiles, uploadFile} = useMediaLibrary();
   const [files, setFiles] = useState<Array<MediaLibraryFile>>([]);
   const {getListing, createDirectory, updateDirectory, deleteDirectory} = useMediaLibraryDirectory();
   const {layout, setLayout} = useContext(LayoutContext);
   const [filesBeforeUpload, setFilesBeforeUpload] = useState<Array<any>>([]);
   const [showOpenModal, setShowOpenModal] = useState(false);
+  const [mediaDirectory, setMediaDirectory] = useState<MediaLibraryDirectory | null>(null);
   const [directories, setDirectories] = useState<Array<MediaLibraryDirectory>>([]);
   const [rowToEdit, setRowToEdit] = useState<MediaLibraryDirectory | null>(null);
   const [rowToDelete, setRowToDelete] = useState<MediaLibraryDirectory | null>(null);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
-  const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+  const [openPleaseWait, setOpenPleaseWait] = useState<boolean>(false);
+  const {acceptedFiles, getRootProps, getInputProps,} = useDropzone({
+    disabled: filesBeforeUpload.length > 0,
     onDrop: acceptedFiles => {
       setFilesBeforeUpload(acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file),
-        uploading: true
+        uploading: true,
+        currentUploading: false,
       })));
     }
   });
@@ -63,9 +68,19 @@ export default function MediaLibrary() {
 
   React.useEffect(() => {
     console.log('dir---slug', slug);
+    if (slug === undefined || slug === null) {
+      setMediaDirectory(null);
+      setFiles([]);
+    } else {
+      const found = directories.find(dir => dir.slug === slug);
+      if (found !== undefined) {
+        setMediaDirectory(found);
+      }
+    }
     (async () => {
       try {
         const response = await getFiles(slug || null);
+        setFiles(response);
         console.log('files response', response);
       } catch (e) {
         console.log(e);
@@ -73,10 +88,45 @@ export default function MediaLibrary() {
     })();
   }, [slug]);
 
+  React.useEffect(() => {
+    console.log('filesBeforeUpload-1', filesBeforeUpload);
+    if (filesBeforeUpload.length > 0) {
+      const currentUploading = filesBeforeUpload.filter(file => file.currentUploading);
+      console.log('currentUploading', currentUploading);
+      if (currentUploading.length === 0) {
+        filesBeforeUpload[0].currentUploading = true;
+        setFilesBeforeUpload([...filesBeforeUpload]);
+        uploadSingleFile(filesBeforeUpload[0]);
+      }
+    }
+    console.log('filesBeforeUpload-2', filesBeforeUpload);
+  }, [filesBeforeUpload]);
+
+  const handleClosePleaseWait = () => {
+    setOpenPleaseWait(false);
+  };
+
+  const uploadSingleFile = async (file: any) => {
+    console.log('uploadSingleFile', file);
+    try {
+      await uploadFile(mediaDirectory !== null ? mediaDirectory.id : null, file);
+      filesBeforeUpload.splice(0, 1);
+      setFilesBeforeUpload([...filesBeforeUpload]);
+    } catch (e: any) {
+      console.log(e);
+    }
+  };
+
   const loadDirectories = async () => {
     const rows: Array<MediaLibraryDirectory> = await getListing();
     setDirectories([...rows]);
     console.log('rows', rows);
+    if (slug !== undefined && slug !== null) {
+      const found = rows.find(dir => dir.slug === slug);
+      if (found !== undefined) {
+        setMediaDirectory(found);
+      }
+    }
   };
 
   const configureSizes = () => {
@@ -84,7 +134,9 @@ export default function MediaLibrary() {
   };
 
   const showAddDirectory = () => {
-    setShowOpenModal(true);
+    if (canDoActionIfNotUploading()) {
+      setShowOpenModal(true);
+    }
   };
 
   const handleShowOpenModalClose = () => {
@@ -94,15 +146,19 @@ export default function MediaLibrary() {
   const handleEdit = (e: React.MouseEvent, row: MediaLibraryDirectory, index: number) => {
     e.preventDefault();
     e.stopPropagation();
-    setRowToEdit(row);
-    setShowOpenModal(true);
+    if (canDoActionIfNotUploading()) {
+      setRowToEdit(row);
+      setShowOpenModal(true);
+    }
   };
 
   const handleDelete = (e: React.MouseEvent, row: MediaLibraryDirectory, index: number) => {
     e.preventDefault();
     e.stopPropagation();
-    setRowToDelete(row);
-    setShowConfirmation(true);
+    if (canDoActionIfNotUploading()) {
+      setRowToDelete(row);
+      setShowConfirmation(true);
+    }
   };
 
   const handleModalResult = async (output: any) => {
@@ -124,11 +180,15 @@ export default function MediaLibrary() {
   };
 
   const openDirectory = (dir: MediaLibraryDirectory) => {
-    navigate(`/media-library/${dir.slug}`);
+    if (canDoActionIfNotUploading()) {
+      navigate(`/media-library/${dir.slug}`);
+    }
   };
 
   const openMediaLibraryHome = () => {
-    navigate('/media-library');
+    if (canDoActionIfNotUploading()) {
+      navigate('/media-library');
+    }
   };
 
   const closeConfirmation = () => {
@@ -148,31 +208,41 @@ export default function MediaLibrary() {
     }
   };
 
+  const canDoActionIfNotUploading = () => {
+    const result = filesBeforeUpload.length === 0;
+
+    if (!result) {
+      setOpenPleaseWait(true);
+    }
+
+    return result;
+  }
+
   return (
     <ContainerWithSpace>
       <TopHeaderStyled>
-        <PageTitle title={t('Media library')} />
+        <PageTitle title={t('Media library') + (mediaDirectory !== null ? (' | ' + mediaDirectory.title) : '')} />
         <ButtonTopStyled variant="contained" color="warning" size={'small'}
                          onClick={configureSizes}>{t('Configure sizes')}</ButtonTopStyled>
       </TopHeaderStyled>
       <BoxContainer>
         <FilesContainerStyled>
           {slug !== undefined && slug !== null ? (
-            <FileItemStyled onClick={openMediaLibraryHome}>
+            <FileItemStyled onClick={openMediaLibraryHome} style={{opacity: filesBeforeUpload.length === 0 ? 1 : 0.3}}>
               <AddDirectoryStyled>
                 <AddIconStyled className={'fa fa-angle-left'} />
                 <AddDirectoryLabelStyled>{t('Back')}</AddDirectoryLabelStyled>
               </AddDirectoryStyled>
             </FileItemStyled>
           ) : (
-            <FileItemStyled onClick={showAddDirectory}>
+            <FileItemStyled onClick={showAddDirectory} style={{opacity: filesBeforeUpload.length === 0 ? 1 : 0.3}}>
               <AddDirectoryStyled>
                 <AddIconStyled className={'fa fa-plus-circle'} />
                 <AddDirectoryLabelStyled>{t('Add directory')}</AddDirectoryLabelStyled>
               </AddDirectoryStyled>
             </FileItemStyled>
           )}
-          <FileItemStyled>
+          <FileItemStyled style={{opacity: filesBeforeUpload.length === 0 ? 1 : 0.3}}>
             <FileUploadStyled {...getRootProps({className: 'dropzone'})}>
               <AddIconStyled className={'fa fa-upload'} />
               <input {...getInputProps()} />
@@ -181,7 +251,8 @@ export default function MediaLibrary() {
           </FileItemStyled>
           {slug === undefined || slug === null ? (
             directories.map((dir: MediaLibraryDirectory, index: number) => (
-              <FileItemStyled key={`Dir_${dir.slug}`} onClick={() => openDirectory(dir)}>
+              <FileItemStyled key={`Dir_${dir.slug}`} onClick={() => openDirectory(dir)}
+                              style={{opacity: filesBeforeUpload.length === 0 ? 1 : 0.3}}>
                 <AddDirectoryStyled>
                   <AddIconStyled className={'fa fa-folder-open'} />
                   <AddDirectoryLabelStyled>{dir.title}</AddDirectoryLabelStyled>
@@ -203,6 +274,17 @@ export default function MediaLibrary() {
               {file.uploading && <LoadingOverlay />}
             </FileItemStyled>
           ))}
+          {files.map((file: any) => (
+            <FileItemStyled key={`file${file.id}`}>
+              <EmptyImageStyled />
+              <FilePreviewStyled src={file.path} />
+              <FileTitleStyled>{file.filename}</FileTitleStyled>
+              <EditIconStyled className={'fa fa-edit'}
+                              onClick={(e: React.MouseEvent<HTMLElement>) => null} />
+              <DeleteIconStyled className={'fa fa-trash'}
+                                onClick={(e: React.MouseEvent<HTMLElement>) => null} />
+            </FileItemStyled>
+          ))}
         </FilesContainerStyled>
       </BoxContainer>
       <ModalMediaDirectory showOpenModal={showOpenModal} onClose={handleShowOpenModalClose}
@@ -210,6 +292,12 @@ export default function MediaLibrary() {
                            onModalResult={handleModalResult} />
       <DialogConfirmation showDialog={showConfirmation} title={t('Delete confirmation')} onClose={closeConfirmation}
                           onConfirm={confirmDelete} content={t('This operation cannot be undone.')} />
+      <Snackbar
+        open={openPleaseWait}
+        autoHideDuration={6000}
+        onClose={handleClosePleaseWait}>
+        <Alert severity={'warning'}>{t('Please wait...')}</Alert>
+      </Snackbar>
     </ContainerWithSpace>
   )
 }

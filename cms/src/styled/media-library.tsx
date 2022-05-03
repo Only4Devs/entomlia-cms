@@ -101,7 +101,7 @@ const FileTitleStyled = styled('div')`
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
+  width: calc(100% - 10px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
