@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-server": "^3.7.0",
     "apollo-server-core": "^3.6.7",
     "apollo-server-fastify": "^3.6.7",
     "dotenv": "^16.0.0",
@@ -16,7 +17,8 @@
     "fastify-compress": "^4.1.0",
     "fastify-helmet": "^7.1.0",
     "graphql": "^16.4.0",
-    "graphql-tools": "^8.2.8"
+    "graphql-tools": "^8.2.8",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "pino-pretty": "^7.6.1",

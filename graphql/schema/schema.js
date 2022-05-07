@@ -7,6 +7,14 @@ const typeDefs = `
     id: Int, title: String
   }
 `;
+const typeDefsNew = `
+  type Query {
+    items: [Item]
+  }
+  type Item {
+    id: Int, title: String, createdAt: String, updatedAt: String
+  }
+`;
 
 // The resolvers
 const resolvers = {
@@ -23,5 +31,6 @@ const resolvers = {
 
 module.exports = {
   typeDefs: typeDefs,
-  resolvers: resolvers
+  resolvers: resolvers,
+  typeDefsNew: typeDefsNew,
 }
