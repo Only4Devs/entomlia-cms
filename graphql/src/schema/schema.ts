@@ -1,4 +1,3 @@
-// The GraphQL schema in string form
 const typeDefs = `
   type Query {
     items: [Item]
@@ -7,16 +6,7 @@ const typeDefs = `
     id: Int, title: String
   }
 `;
-const typeDefsNew = `
-  type Query {
-    items: [Item]
-  }
-  type Item {
-    id: Int, title: String, createdAt: String, updatedAt: String
-  }
-`;
 
-// The resolvers
 const resolvers = {
   Query: {
     items: () => {
@@ -29,8 +19,7 @@ const resolvers = {
   },
 };
 
-module.exports = {
-  typeDefs: typeDefs,
-  resolvers: resolvers,
-  typeDefsNew: typeDefsNew,
+export = {
+  typeDefs,
+  resolvers,
 }

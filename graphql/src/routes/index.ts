@@ -1,3 +1,5 @@
+import {FastifyReply, FastifyRequest} from 'fastify';
+
 const opts = {
   schema: {
     response: {
@@ -11,8 +13,8 @@ const opts = {
   }
 }
 
-async function routes(fastify, options) {
-  fastify.get('/', opts, async (request, reply) => {
+async function routes(fastify: any, options: any) {
+  fastify.get('/', opts, async (request: FastifyRequest, reply: FastifyReply) => {
     return {status: 'ok'}
   })
 }
