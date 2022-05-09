@@ -1,7 +1,7 @@
 'use strict'
-
 require('dotenv').config()
 
+import {QueryTypes, Sequelize} from 'sequelize';
 import {fastify, FastifyReply, FastifyRequest} from 'fastify';
 // @ts-ignore
 import helmet from 'fastify-helmet';
@@ -15,6 +15,8 @@ import {
 
 const build = async (opts = {}) => {
   const app = fastify(opts)
+  const sequelizeDB = new Sequelize(process.env.DATABASE_URL!!);
+  const sequelizeContent = new Sequelize(process.env.DATABASE_CONTENT_URL!!);
 
   // app.register(helmet, {
   //   contentSecurityPolicy: false
@@ -27,8 +29,94 @@ const build = async (opts = {}) => {
 
   app.register(require('./routes/index'))
 
+  const loadDatabaseDefinitions = async () => {
+    console.log('loadDatabaseDefinitions');
+    const sql = `
+      SELECT id, tableName, title, slug
+      FROM CollectionType
+    `;
+    const tables: Array<any> = await sequelizeDB.query(sql, {type: QueryTypes.SELECT});
+
+    const sqlColumns = `
+      SELECT *
+      FROM CollectionTypeField
+    `;
+    const columns: Array<any> = await sequelizeDB.query(sqlColumns, {type: QueryTypes.SELECT});
+
+    tables.forEach(table => {
+      table.columns = columns.filter(column => column.collectionTypeId === table.id);
+    });
+
+    return tables;
+  }
+
   const loadDynamicSchema = async () => {
-    const {typeDefs, resolvers} = require('./schema/schema')
+    const tables = await loadDatabaseDefinitions()
+    console.log('tables', tables);
+
+    let typeDefs = '';
+    tables.forEach(table => {
+      const fields = [];
+      fields.push('id: Int');
+      table.columns.forEach((column: any) => {
+        let fieldType = 'String';
+        switch (column.fieldType) {
+          case 'varchar':
+            fieldType = 'String';
+            break;
+          case 'enum':
+            fieldType = 'String';
+            break;
+          case 'editor':
+            fieldType = 'String';
+            break;
+          case 'uuid':
+            fieldType = 'String';
+            break;
+          case 'text':
+            fieldType = 'String';
+            break;
+          case 'number':
+            fieldType = 'Int';
+            if (column.numberType === 'decimal') {
+              fieldType = 'Float';
+            }
+            break;
+          case 'boolean':
+            fieldType = 'Boolean';
+            break;
+        }
+        fields.push(`${column.slug}: ${fieldType}`);
+      });
+      typeDefs += `
+        type ${table.tableName} {
+          ${fields.join(', ')}
+        }
+      `;
+    });
+
+    let query = 'type Query {';
+    const queryParts: Array<string> = [];
+    tables.forEach(table => {
+      queryParts.push(`${table.tableName}: [${table.tableName}]`);
+    });
+    query += queryParts.join(', ');
+    query += '}';
+    typeDefs += `
+      ${query}
+    `;
+
+    console.log('typeDefs', typeDefs);
+
+    const resolvers: any = {
+      Query: {}
+    };
+    tables.forEach(table => {
+      resolvers.Query[table.tableName] = async () => {
+        return await sequelizeContent.query(`SELECT * FROM ${table.tableName}`, {type: QueryTypes.SELECT});
+      };
+    });
+
     return {
       typeDefs,
       resolvers,

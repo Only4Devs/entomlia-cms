@@ -7,7 +7,8 @@
     "build": "tsc -w -p tsconfig.json",
     "dev": "nodemon build/server.js",
     "start": "node build/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node ./npm-scripts/post-install.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +22,9 @@
     "fastify-helmet": "^7.1.0",
     "graphql": "^16.4.0",
     "graphql-tools": "^8.2.8",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.19.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
