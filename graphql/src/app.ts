@@ -13,6 +13,10 @@ import {
   ApolloServerPluginLandingPageGraphQLPlayground
 } from 'apollo-server-core';
 
+const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const build = async (opts = {}) => {
   const app = fastify(opts)
   const sequelizeDB = new Sequelize(process.env.DATABASE_URL!!);
@@ -58,6 +62,8 @@ const build = async (opts = {}) => {
     tables.forEach(table => {
       const fields = [];
       fields.push('id: Int');
+      fields.push('createdAt: String');
+      fields.push('updatedAt: String');
       table.columns.forEach((column: any) => {
         let fieldType = 'String';
         switch (column.fieldType) {
@@ -99,6 +105,10 @@ const build = async (opts = {}) => {
     const queryParts: Array<string> = [];
     tables.forEach(table => {
       queryParts.push(`${table.tableName}: [${table.tableName}]`);
+      const fieldsAsUrl = table.columns.filter((it: any) => it.makeUrl);
+      fieldsAsUrl.forEach((it: any) => {
+        queryParts.push(`${table.tableName}By${capitalizeFirstLetter(it.slug)}(${it.slug}: String!): [${table.tableName}]`);
+      });
     });
     query += queryParts.join(', ');
     query += '}';
@@ -113,8 +123,20 @@ const build = async (opts = {}) => {
     };
     tables.forEach(table => {
       resolvers.Query[table.tableName] = async () => {
-        return await sequelizeContent.query(`SELECT * FROM ${table.tableName}`, {type: QueryTypes.SELECT});
+        return await sequelizeContent.query(`SELECT *
+                                             FROM ${table.tableName}`, {type: QueryTypes.SELECT});
       };
+      const fieldsAsUrl = table.columns.filter((it: any) => it.makeUrl);
+      fieldsAsUrl.forEach((it: any) => {
+        resolvers.Query[`${table.tableName}By${capitalizeFirstLetter(it.slug)}`] = async (obj: any, args: any, context: any) => {
+          return await sequelizeContent.query(`SELECT *
+                                               FROM ${table.tableName}
+                                               WHERE ${it.slug} = ?`, {
+            type: QueryTypes.SELECT,
+            replacements: [args[it.slug]]
+          });
+        };
+      });
     });
 
     return {
