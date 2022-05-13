@@ -1,6 +1,14 @@
 'use strict'
+
 require('dotenv').config()
 
+import {
+  capitalizeFirstLetter,
+  defineFieldType,
+  getQueryByIdTableArray,
+  getQueryBySlugTableArray,
+  getQueryTableArray
+} from './lib/helper';
 import {QueryTypes, Sequelize} from 'sequelize';
 import {fastify, FastifyReply, FastifyRequest} from 'fastify';
 // @ts-ignore
@@ -12,10 +20,6 @@ import {
   ApolloServerPluginLandingPageDisabled,
   ApolloServerPluginLandingPageGraphQLPlayground
 } from 'apollo-server-core';
-
-const capitalizeFirstLetter = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
 
 const build = async (opts = {}) => {
   const app = fastify(opts)
@@ -65,34 +69,7 @@ const build = async (opts = {}) => {
       fields.push('createdAt: String');
       fields.push('updatedAt: String');
       table.columns.forEach((column: any) => {
-        let fieldType = 'String';
-        switch (column.fieldType) {
-          case 'varchar':
-            fieldType = 'String';
-            break;
-          case 'enum':
-            fieldType = 'String';
-            break;
-          case 'editor':
-            fieldType = 'String';
-            break;
-          case 'uuid':
-            fieldType = 'String';
-            break;
-          case 'text':
-            fieldType = 'String';
-            break;
-          case 'number':
-            fieldType = 'Int';
-            if (column.numberType === 'decimal') {
-              fieldType = 'Float';
-            }
-            break;
-          case 'boolean':
-            fieldType = 'Boolean';
-            break;
-        }
-        fields.push(`${column.slug}: ${fieldType}`);
+        fields.push(`${column.slug}: ${defineFieldType(column)}`);
       });
       typeDefs += `
         type ${table.tableName} {
@@ -104,11 +81,11 @@ const build = async (opts = {}) => {
     let query = 'type Query {';
     const queryParts: Array<string> = [];
     tables.forEach(table => {
-      queryParts.push(`${table.tableName}: [${table.tableName}]`);
-      queryParts.push(`${table.tableName}ById(id: Int!): [${table.tableName}]`);
+      queryParts.push(getQueryTableArray(table.tableName));
+      queryParts.push(getQueryByIdTableArray(table.tableName));
       const fieldsAsUrl = table.columns.filter((it: any) => it.makeUrl);
       fieldsAsUrl.forEach((it: any) => {
-        queryParts.push(`${table.tableName}By${capitalizeFirstLetter(it.slug)}(${it.slug}: String!): [${table.tableName}]`);
+        queryParts.push(getQueryBySlugTableArray(table.tableName, it.slug));
       });
     });
     query += queryParts.join(', ');
