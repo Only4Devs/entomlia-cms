@@ -105,6 +105,7 @@ const build = async (opts = {}) => {
     const queryParts: Array<string> = [];
     tables.forEach(table => {
       queryParts.push(`${table.tableName}: [${table.tableName}]`);
+      queryParts.push(`${table.tableName}ById(id: Int!): [${table.tableName}]`);
       const fieldsAsUrl = table.columns.filter((it: any) => it.makeUrl);
       fieldsAsUrl.forEach((it: any) => {
         queryParts.push(`${table.tableName}By${capitalizeFirstLetter(it.slug)}(${it.slug}: String!): [${table.tableName}]`);
@@ -126,6 +127,15 @@ const build = async (opts = {}) => {
         return await sequelizeContent.query(`SELECT *
                                              FROM ${table.tableName}`, {type: QueryTypes.SELECT});
       };
+      resolvers.Query[`${table.tableName}ById`] = async (obj: any, args: any, context: any) => {
+        return await sequelizeContent.query(`SELECT *
+                                             FROM ${table.tableName}
+                                             WHERE id = ?`, {
+          type: QueryTypes.SELECT,
+          replacements: [args['id']]
+        });
+      };
+
       const fieldsAsUrl = table.columns.filter((it: any) => it.makeUrl);
       fieldsAsUrl.forEach((it: any) => {
         resolvers.Query[`${table.tableName}By${capitalizeFirstLetter(it.slug)}`] = async (obj: any, args: any, context: any) => {
