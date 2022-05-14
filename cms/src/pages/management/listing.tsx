@@ -20,6 +20,7 @@ import {
 } from '../../styled/layout-common';
 import DialogConfirmation from '../../components/dialog/dialog-confirmation';
 import ActionDropdown from '../../components/table/action-dropdown';
+import DateTimeDisplay from '../../components/layout/common/date-time-display';
 
 const ThRightStyled = styled('th')`
   text-align: right;
@@ -187,8 +188,8 @@ export default function Listing() {
                       {row[it.slug!!]}
                     </td>
                   ))}
-                  <td>{row[`createdAt`]}</td>
-                  <td>{row[`updatedAt`]}</td>
+                  <td><DateTimeDisplay value={row[`createdAt`]} showDate={true} showTime={true} /></td>
+                  <td><DateTimeDisplay value={row[`updatedAt`]} showDate={true} showTime={true} /></td>
                   <td>
                     <ActionDropdown slug={slug!!} id={row[`id`]} index={index} reloadListing={getNewListing} />
                   </td>
