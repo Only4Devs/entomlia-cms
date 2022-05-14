@@ -139,7 +139,7 @@ const updateMediaSize = async (directoryId: number | null, mediaFileId: number, 
   if (directoryId !== null) {
     dirPath += `/d${directoryId}/f${mediaFileId}`
   } else {
-    dirPath += `f${mediaFileId}`
+    dirPath += `/f${mediaFileId}`
   }
   dirPath += `/${fileName}`
 
@@ -165,7 +165,7 @@ const handleFileUpload = async (file: any, directoryId: number | null, mediaFile
     await ensureDirectoryExists(pathFile)
   } else {
     pathFile = `${__dirname}/../../public/storage/f${mediaFileId}`
-    dirPath += `f${mediaFileId}`
+    dirPath += `/f${mediaFileId}`
     await ensureDirectoryExists(pathFile)
   }
   fs.writeFile(`${pathFile}/${file.name}`, file.data, async (e) => {
