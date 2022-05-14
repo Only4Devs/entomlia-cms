@@ -187,12 +187,14 @@ export default function MediaLibrary() {
 
   const openDirectory = (dir: MediaLibraryDirectory) => {
     if (canDoActionIfNotUploading()) {
+      setFiles([]);
       navigate(`/media-library/${dir.slug}`);
     }
   };
 
   const openMediaLibraryHome = () => {
     if (canDoActionIfNotUploading()) {
+      setFiles([]);
       navigate('/media-library');
     }
   };
@@ -305,7 +307,6 @@ export default function MediaLibrary() {
           {files.map((file: any) => (
             <FileItemStyled key={`file${file.id}`}>
               <EmptyImageStyled />
-
               <FilePreviewStyled src={file.path} />
               <FileTitleStyled>{file.filename}</FileTitleStyled>
               <EditIconStyled className={'fa fa-edit'}
