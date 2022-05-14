@@ -164,7 +164,7 @@ export default function FormFieldInput({
           <Controller
             control={control}
             name={field.slug!!}
-            defaultValue={false}
+            defaultValue={defaultValue === 1}
             render={({
                        field: {onChange, onBlur, value, name, ref},
                        fieldState: {invalid, isTouched, isDirty, error},
