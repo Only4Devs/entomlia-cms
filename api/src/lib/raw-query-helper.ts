@@ -1,6 +1,7 @@
 import {isNotEmpty} from './request-helper'
 import prismaContent from './prisma-content';
 import {v4 as uuidv4} from 'uuid';
+import slugify from 'slugify';
 
 const generateTableName = (tableName: string) => {
   const value = tableName.split('-')
@@ -142,6 +143,17 @@ const modifyColumn = async (tableName: string, field: any) => {
   await prismaContent.$queryRawUnsafe(sql)
 }
 
+const handleCustomValue = (field: any, value: any, postData: any): any => {
+  if (field.makeUrl) {
+    value = slugify(value, {replacement: '-', lower: true})
+    try {
+      value = slugify(postData[field.sourceUrl], {replacement: '-', lower: true})
+    } catch (e) {
+    }
+  }
+  return value
+}
+
 const insertRecord = async (tableName: string, data: any, fields: Array<any>) => {
   const parts: Array<string> = []
   for (const field of fields) {
@@ -154,6 +166,7 @@ const insertRecord = async (tableName: string, data: any, fields: Array<any>) =>
       }
       const fieldFound = fields.find((it: any) => it.slug === field.slug)
       if (fieldFound !== undefined && fieldFound !== null) {
+        value = handleCustomValue(field, value, data)
         if (['varchar', 'enum', 'editor', 'text', 'uuid', 'date'].indexOf(field.fieldType) !== -1) {
           parts.push(`'${value}'`)
         } else {
@@ -184,6 +197,7 @@ const updateRow = async (tableName: string, id: string | number, data: any, fiel
       }
       const fieldFound = fields.find((it: any) => it.slug === field.slug)
       if (fieldFound !== undefined && fieldFound !== null) {
+        value = handleCustomValue(field, value, data)
         if (['varchar', 'enum', 'editor', 'text', 'uuid', 'date'].indexOf(field.fieldType) !== -1) {
           parts.push(`${field.slug} = '${value}'`)
         } else {
