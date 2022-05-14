@@ -21,6 +21,7 @@ import {
 import DialogConfirmation from '../../components/dialog/dialog-confirmation';
 import ActionDropdown from '../../components/table/action-dropdown';
 import DateTimeDisplay from '../../components/layout/common/date-time-display';
+import DynamicValueFormatter from '../../components/layout/common/dynamic-value-formatter';
 
 const ThRightStyled = styled('th')`
   text-align: right;
@@ -185,7 +186,7 @@ export default function Listing() {
                   <td>{row[`id`]}</td>
                   {fields.filter(x => x.showOnListing).map((it, index) => (
                     <td key={`TableCell${index}`}>
-                      {row[it.slug!!]}
+                      <DynamicValueFormatter value={row[it.slug!!]} field={it.slug!!} fields={fields} />
                     </td>
                   ))}
                   <td><DateTimeDisplay value={row[`createdAt`]} showDate={true} showTime={true} /></td>
