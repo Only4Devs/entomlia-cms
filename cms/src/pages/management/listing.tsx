@@ -191,7 +191,7 @@ export default function Listing() {
                   ))}
                   <td><DateTimeDisplay value={row[`createdAt`]} showDate={true} showTime={true} /></td>
                   <td><DateTimeDisplay value={row[`updatedAt`]} showDate={true} showTime={true} /></td>
-                  <td>
+                  <td className={'text-right'}>
                     <ActionDropdown slug={slug!!} id={row[`id`]} index={index} reloadListing={getNewListing} />
                   </td>
                 </tr>

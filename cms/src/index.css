@@ -122,3 +122,7 @@ textarea {
 .holder-drag-and-drop [data-rbd-droppable-id="3"] {
   flex: 1 1 100%;
 }
+
+.text-right {
+  text-align: right;
+}

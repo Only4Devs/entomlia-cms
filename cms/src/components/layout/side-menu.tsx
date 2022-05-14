@@ -13,6 +13,7 @@ import MenuList from './side-menu/menu-list';
 import {useNavigate} from 'react-router-dom';
 import useAuth from '../../hooks/use-auth';
 import {UserContext} from '../../hooks/user-context';
+import {version} from '../../../package.json';
 
 const DrawerStyled = styled(Drawer)((props: any) => (`
   flex-shrink: 0;
@@ -46,6 +47,15 @@ const MenuListWithoutBorderStyled = styled('ul')`
   list-style: none;
   padding: 0;
   margin: 0;
+`;
+
+const VersionStyled = styled('div')`
+  font-size: 11px;
+  color: #333;
+  text-align: right;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 `;
 
 const StylesMenuItem = `
@@ -158,6 +168,9 @@ export default function SideMenu({drawerWidth}: any) {
                     <MenuIcon icon={'fa fa-sign-out-alt'} />
                     {drawerWidth === 240 ? <MenuListItemTitleStyled>{t('Logout')}</MenuListItemTitleStyled> : <></>}
                   </MenuListLinkAsDivStyled>
+                </li>
+                <li>
+                  <VersionStyled>v{version}</VersionStyled>
                 </li>
               </MenuList>
             </MenuListBottomStyled>
