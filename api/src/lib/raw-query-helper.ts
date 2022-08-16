@@ -146,9 +146,11 @@ const modifyColumn = async (tableName: string, field: any) => {
 const handleCustomValue = (field: any, value: any, postData: any): any => {
   if (field.makeUrl) {
     value = slugify(value, {replacement: '-', lower: true})
-    try {
-      value = slugify(postData[field.sourceUrl], {replacement: '-', lower: true})
-    } catch (e) {
+    if (value === undefined || value === null || value.length === 0) {
+      try {
+        value = slugify(postData[field.sourceUrl], {replacement: '-', lower: true})
+      } catch (e) {
+      }
     }
   }
   return value
