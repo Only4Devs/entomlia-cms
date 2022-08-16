@@ -155,7 +155,7 @@ export default function DefineTypesFieldsListing({
     <>
       <RowFlexStyled>
         <CellFlexStyled>
-          <PageTitle title={`${collectionType !== null ? (collectionType.title + ' | ') : ''}${t('Fields')}`} />
+          <PageTitle title={`${collectionType !== null ? (collectionType?.displayTitle + ' | ') : ''}${t('Fields')}`} />
           <Button variant="contained" color="primary" size={'small'}
                   onClick={goToEditCollection}>{t('Edit')}</Button>
         </CellFlexStyled>

@@ -22,6 +22,7 @@ const getListing = async () => {
         slug: true,
         tableName: true,
         icon: true,
+        displayTitle: true,
       },
     }) as any[];
   } catch (e) {
@@ -59,6 +60,7 @@ const getBySlug = async (slug: string) => {
         slug: true,
         tableName: true,
         icon: true,
+        displayTitle: true,
       },
     }) as any;
 

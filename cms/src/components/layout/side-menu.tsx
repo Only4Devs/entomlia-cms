@@ -151,7 +151,7 @@ export default function SideMenu({drawerWidth}: any) {
               <MenuSeparator drawerWidth={drawerWidth} label={t('Management')} />
               <MenuListWithoutBorderStyled>
                 {layout.collectionTypes && layout.collectionTypes.map((collectionType: CollectionType) => (
-                  <MenuListLink icon={collectionType.icon} label={collectionType.title}
+                  <MenuListLink icon={collectionType.icon} label={collectionType.displayTitle}
                                 key={`SideMenuCollectionType${collectionType.id}`}
                                 to={`/listing/${collectionType.slug}`}
                                 drawerWidth={drawerWidth} currentPath={layout.sideMenuContent}

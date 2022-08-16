@@ -100,27 +100,39 @@ textarea {
 
 .holder-drag-and-drop {
   flex-wrap: wrap;
+  margin: -10px -15px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .holder-drag-and-drop [data-rbd-droppable-id] {
-  padding: 15px !important;
+  padding: 30px !important;
   min-height: 150px;
-  border: 1px solid #ddd;
 }
 
 .holder-drag-and-drop [data-rbd-droppable-id="0"] {
   flex: 1 1 100%;
+  border-bottom: 1px solid #ddd;
+}
+
+.holder-drag-and-drop [data-rbd-droppable-id="1"] {
+  border-right: 1px solid #ddd;
+}
+
+.holder-drag-and-drop [data-rbd-droppable-id="2"] {
+  border-left: 1px solid transparent;
 }
 
 .holder-drag-and-drop [data-rbd-droppable-id="1"],
 .holder-drag-and-drop [data-rbd-droppable-id="2"]{
-  flex: 0 1 calc(50% - 32px);
-  max-width: calc(50% - 32px);
+  flex: 0 1 calc(50% - 62px);
+  max-width: calc(50% - 62px);
   width: auto !important;
 }
 
 .holder-drag-and-drop [data-rbd-droppable-id="3"] {
   flex: 1 1 100%;
+  border-top: 1px solid #ddd;
 }
 
 .text-right {

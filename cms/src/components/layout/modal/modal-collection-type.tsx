@@ -54,6 +54,24 @@ export default function ModalCollectionType({onDataSubmit, showFields, inputEdit
         <Grid item xs={12} md={6}>
           <InputHolder>
             <TextField
+              {...register('displayTitle', {required: true})}
+              onChange={e => setValue('displayTitle', e.target.value)}
+              variant={'outlined'}
+              type={'text'}
+              className={``}
+              size={'small'}
+              placeholder={t('Enter title')}
+              label={t('Display title')}
+              helperText={t(errors.displayTitle?.type)}
+              error={errors && errors.displayTitle !== undefined}
+            />
+          </InputHolder>
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <InputHolder>
+            <TextField
               {...register('icon', {required: true})}
               onChange={e => setValue('icon', e.target.value)}
               variant={'outlined'}

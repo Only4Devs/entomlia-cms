@@ -36,7 +36,7 @@ export default function TemplateDefineTypes({children}: any) {
         <HeaderStyled>{t('Define types')}</HeaderStyled>
         <MenuList>
           {layout.collectionTypes && layout.collectionTypes.map((collectionType: CollectionType) => (
-            <MenuListLink icon={collectionType.icon} label={collectionType.title}
+            <MenuListLink icon={collectionType.icon} label={collectionType.displayTitle}
                           key={`InnerMenuCollectionType${collectionType.id}`}
                           to={`/define-types/configure/${collectionType.slug}`}
                           drawerWidth={240} currentPath={layout.sideMenuCollectionType}

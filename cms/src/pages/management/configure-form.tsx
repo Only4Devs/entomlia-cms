@@ -46,14 +46,16 @@ const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
   padding: grid * 2,
   margin: `0 0 ${grid}px 0`,
   maxWidth: isDragging ? '50%' : '100%',
-  background: isDragging ? "#ccc" : "#e7e7e7",
+  background: isDragging ? "#ccc" : "#fff",
+  border: '1px solid #e7e7e7',
+  borderRadius: 10,
   ...draggableStyle
 });
 
 const getListStyle = (isDraggingOver: boolean) => ({
   background: isDraggingOver ? "#eee" : "#fff",
   padding: grid,
-  width: 250
+  width: 250,
 });
 
 export default function ConfigureForm() {

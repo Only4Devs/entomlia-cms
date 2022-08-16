@@ -53,6 +53,7 @@ export default function Listing() {
   const {getCollectionType, updateField} = useCollectionType();
   const [rows, setRows] = React.useState([]);
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [collectionType, setCollectionType] = React.useState<CollectionType | null>(null);
   const [fields, setFields] = React.useState<Array<CollectionTypeField | FieldType>>([]);
   const [anchorPopoverEl, setAnchorPopoverEl] = React.useState<null | HTMLElement>(null);
   const openPopover = Boolean(anchorPopoverEl);
@@ -81,6 +82,7 @@ export default function Listing() {
               setFields(arr);
             }
           }
+          setCollectionType(collectionType);
         } catch (e) {
           console.log(e);
         }
@@ -118,7 +120,7 @@ export default function Listing() {
   return (
     <ContainerWithSpace>
       <TopHeaderStyled>
-        <PageTitle title={`${t('Listing')}: ${slug}`} />
+        <PageTitle title={`${t('Listing')}: ${collectionType !== null ? collectionType.displayTitle : ''}`} />
         <div>
           <ButtonTopStyled aria-describedby={'configure-view-popover'} variant="contained" color="warning"
                            size={'small'} onClick={handlePopoverClick}>

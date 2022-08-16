@@ -6,6 +6,7 @@ export interface CollectionType {
   slug: string;
   tableName: string;
   title: string;
+  displayTitle: string;
   icon: string;
   fieldType: string;
   isRequired: boolean;

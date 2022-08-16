@@ -58,6 +58,7 @@ model MediaSize {
 model CollectionType {
   id          Int        @id @default(autoincrement())
   title       String     @db.VarChar(255)     @unique
+  displayTitle       String?     @db.VarChar(255)
   slug        String     @db.VarChar(255)     @unique
   tableName   String     @db.VarChar(255)     @unique
   createdAt   DateTime   @default(now())
