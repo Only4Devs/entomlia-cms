@@ -73,6 +73,7 @@ model CollectionTypeField {
   collectionTypeId Int?
   CollectionType   CollectionType?  @relation(fields: [collectionTypeId], references: [id])
   title            String           @db.VarChar(255)
+  displayName      String?          @db.VarChar(255)
   slug             String           @db.VarChar(255)
   fieldType        String           @db.VarChar(255)
   defaultValue     String?          @db.VarChar(255)

@@ -2,6 +2,7 @@ export default interface CollectionTypeField {
   id: number;
   collectionTypeId: number;
   title: string;
+  displayName: string;
   slug: string;
   fieldType: string;
   isRequired: boolean;
