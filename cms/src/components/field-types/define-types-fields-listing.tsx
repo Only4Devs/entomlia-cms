@@ -184,7 +184,7 @@ export default function DefineTypesFieldsListing({
             <tbody>
             {fields.map((field: FieldType, index: number) => (
               <tr key={`TableField${index}`} className={`${field.toDelete ? 'row-delete' : ''}`}>
-                <td>{field.title}</td>
+                <td><span>{field.displayName}</span><span className={'text-grey'}> ({field.title})</span></td>
                 <td>
                   <TextUppercaseStyled>
                     {field.fieldType}{field.fieldType === 'varchar' ? `(${field.maxLength})` : ''}

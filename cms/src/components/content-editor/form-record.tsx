@@ -30,6 +30,12 @@ const GridButtonBottomStyled = styled(Grid)`
   justify-content: flex-end;
 `;
 
+const FormStyled = styled.form`
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+`;
+
 export default function FormRecord({slug, id = null, editData = null}: FormRecordProps) {
   const {t} = useTranslation();
   const navigate = useNavigate();
@@ -94,7 +100,7 @@ export default function FormRecord({slug, id = null, editData = null}: FormRecor
   return (
     collectionType !== null ? (
       <LocalizationProvider dateAdapter={DateAdapter} locale={'pl'}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <FormStyled onSubmit={handleSubmit(onSubmit)}>
           {state.length >= 4 ? (
             <>
               <Grid container spacing={2}>
@@ -138,7 +144,7 @@ export default function FormRecord({slug, id = null, editData = null}: FormRecor
               </Grid>
             </>
           ) : <></>}
-        </form>
+        </FormStyled>
       </LocalizationProvider>
     ) : (
       <></>

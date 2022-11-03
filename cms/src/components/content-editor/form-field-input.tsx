@@ -44,11 +44,9 @@ export default function FormFieldInput({
 
   return (
     <InputHolder key={`FieldBox${index}`}>
-      <div>{index} - {field.slug} - {field.fieldType}</div>
-
       {field.fieldType === 'date' && field.dateType === 'date' ? (
         <DatePicker
-          label="Date"
+          label={field.displayName}
           value={localValue}
           inputFormat={'YYYY-MM-DD'}
           onChange={(newValue) => {
@@ -61,7 +59,7 @@ export default function FormFieldInput({
 
       {field.fieldType === 'date' && field.dateType === 'time' ? (
         <TimePicker
-          label="Time"
+          label={field.displayName}
           value={localValue}
           inputFormat={'HH:mm'}
           ampm={false}
@@ -78,7 +76,7 @@ export default function FormFieldInput({
       {field.fieldType === 'date' && field.dateType === 'datetime' ? (
         <DateTimePicker
           renderInput={(props) => <TextField {...props} error={errors && errors[field.slug!!] !== undefined} />}
-          label="Date & time"
+          label={field.displayName}
           ampm={false}
           value={localValue}
           inputFormat={'YYYY-MM-DD HH:mm'}
@@ -98,7 +96,7 @@ export default function FormFieldInput({
           className={``}
           size={'small'}
           defaultValue={null}
-          label={field.slug}
+          label={field.displayName}
           helperText={errors[field.slug!!] ? t(errors[field.slug!!].type) : ''}
           error={errors && errors[field.slug!!] !== undefined}
         />
@@ -113,7 +111,7 @@ export default function FormFieldInput({
           className={``}
           size={'small'}
           defaultValue={null}
-          label={field.slug}
+          label={field.displayName}
           helperText={errors[field.slug!!] ? t(errors[field.slug!!].type) : ''}
           error={errors && errors[field.slug!!] !== undefined}
         />
@@ -125,7 +123,7 @@ export default function FormFieldInput({
           defaultValue={defaultValue !== null ? defaultValue : (field?.defaultValue || 'null')}
           labelId="input-default-value-label"
           id="input-default-value"
-          label={t('Default value')}
+          label={field.displayName}
           onChange={e => {
             setValue(field.slug!!, e.target.value);
           }}
@@ -179,7 +177,7 @@ export default function FormFieldInput({
                 size={'small'} />
             )}
           />
-        } label={field.slug!!} />
+        } label={field.displayName} />
       ) : <></>}
 
       {field.fieldType === 'text' ? (
@@ -197,7 +195,7 @@ export default function FormFieldInput({
                                   defaultValue={defaultValue !== null ? defaultValue : false} />
               )}
             />
-          } label={field.slug!!} />
+          } label={field.displayName} />
         </div>
       ) : <></>}
     </InputHolder>

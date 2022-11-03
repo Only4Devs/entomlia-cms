@@ -111,6 +111,7 @@ export default function ModalNewField({
 
       const fieldType: FieldType = {
         title: data.title,
+        displayName: data.displayName,
         fieldType: fieldTypeValue,
         maxLength: maxLength,
         isRequired: data.isRequired,
@@ -150,6 +151,25 @@ export default function ModalNewField({
               <FieldTypesListing onSelect={onSelectFieldType} />
             ) : (
               <form onSubmit={handleSubmit(onSubmit)}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <InputHolder>
+                      <TextField
+                        {...register('displayName', {required: true})}
+                        onChange={e => setValue('displayName', e.target.value)}
+                        defaultValue={inputEditField?.displayName || null}
+                        variant={'outlined'}
+                        type={'text'}
+                        className={``}
+                        size={'small'}
+                        placeholder={t('Enter display name')}
+                        label={t('Display name')}
+                        helperText={t(errors.displayName?.type)}
+                        error={errors && errors.displayName !== undefined}
+                      />
+                    </InputHolder>
+                  </Grid>
+                </Grid>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={6}>
                     <InputHolder>

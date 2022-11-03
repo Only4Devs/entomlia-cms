@@ -25,4 +25,5 @@ export interface FieldType {
   makeUrl: boolean;
   sourceUrl?: string;
   showOnListing?: boolean;
+  displayName: string;
 }

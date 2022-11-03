@@ -8,7 +8,7 @@ export interface InputHolderProps {
 
 export default function InputHolder({children, withBottomSpacing = true}: InputHolderProps) {
   return (
-    <div className={css`${withBottomSpacing ? 'margin-bottom: 20px;' : ''}`}>
+    <div className={css`${withBottomSpacing ? 'margin-bottom: 30px;' : ''}`}>
       {children}
     </div>
   )
