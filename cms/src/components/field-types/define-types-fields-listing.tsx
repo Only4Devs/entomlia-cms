@@ -178,6 +178,7 @@ export default function DefineTypesFieldsListing({
             <tr>
               <th>{t('Name')}</th>
               <th>{t('Type')}</th>
+              <th>{t('Required')}</th>
               <th></th>
             </tr>
             </thead>
@@ -189,6 +190,9 @@ export default function DefineTypesFieldsListing({
                   <TextUppercaseStyled>
                     {field.fieldType}{field.fieldType === 'varchar' ? `(${field.maxLength})` : ''}
                   </TextUppercaseStyled>
+                </td>
+                <td>
+                  {t(field.isRequired ? 'Yes': 'No')}
                 </td>
                 <ColumnActionsStyled>
                   {!field.toDelete ? (

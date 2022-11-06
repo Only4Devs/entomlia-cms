@@ -89,7 +89,7 @@ export default function FormFieldInput({
 
       {field.fieldType === 'varchar' ? (
         <TextField
-          {...register(field.slug!!)}
+          {...register(field.slug!!, {required: field.isRequired})}
           onChange={e => setValue(field.slug!!, e.target.value)}
           variant={'outlined'}
           type={'text'}
